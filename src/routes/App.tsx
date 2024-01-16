@@ -6,12 +6,12 @@ import { RouteObject } from 'react-router-dom';
 
 import DiscordSignInButton from '@/components/buttons/DiscordSignIn';
 
-const routerData: RouteObject = {
+export const routerData: RouteObject = {
     path: '/',
     element: <App />,
 }
 
-function App() {
+export default function App() {
     const pageThemeConfig: ThemeConfig = {
         components: {
             Button: {
@@ -93,6 +93,3 @@ function App() {
         </>
     )
 }
-
-export { routerData };
-export default App

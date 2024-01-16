@@ -4,10 +4,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css';
 
 import { routerData as appRouterData } from '@/routes/App';
-import { routerData as settingsRouterData } from '@/routes/settings/Settings';
+import { routerData as serverSelectorRouterData } from '@/routes/settings/ServerSelector';
+import { routerData as settingsRouterData } from '@/routes/serverSettings/Settings';
 
 const router = createBrowserRouter([
     appRouterData,
+    serverSelectorRouterData,
     settingsRouterData,
 ]);
 

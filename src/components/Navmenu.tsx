@@ -1,6 +1,6 @@
 import { ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { HomeIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 type PageLink = {
@@ -10,10 +10,17 @@ type PageLink = {
     children?: PageLink[]
 };
 
-function Navmenu() {
+export type NavmenuProps = {
+    serverId: string
+}
+
+export function Navmenu(props: NavmenuProps) {
     let [expanded, setExpanded] = useState(true);
     const location = useLocation();
     const pathname = location.pathname;
+
+    const serverId = props.serverId;
+    /**@TODO incorporate serverId in these redirect links, maybe with something like watchEffect */
 
     let links: PageLink[] = [
         { name: 'Home', path: '/', icon: <HomeIcon className='w-5 h-5' /> },
@@ -24,7 +31,7 @@ function Navmenu() {
             { name: 'Advertisment Warnings', path: '/settings/adwarnings' },
             { name: 'Reports', path: '/settings/reports' },
         ] }
-    ];
+    ]
 
     return (
         <div className={
@@ -66,7 +73,7 @@ function Navmenu() {
                     </a>
 
                     {link.children && link.children.map((link2, i2) => (
-                        <a href={link2.path} key={link2.path} className={'text-slate-400 hover:text-blue-500 text-md w-full p-1 hover:bg-bgdark-l ' + (link2.path === pathname ? 'bg-bgdark-l border-r-2 border-blurple' : '')}>
+                        <a href={link2.path} key={link2.path} className={'text-left text-slate-400 hover:text-blue-500 text-md w-full p-1 hover:bg-bgdark-l ' + (link2.path === pathname ? 'bg-bgdark-l border-r-2 border-blurple' : '')}>
                             {i2 === link.children!.length - 1 ? '└─' : '├─'} {link2.name}
                         </a>
                     ))}
@@ -77,5 +84,3 @@ function Navmenu() {
         </div>
     )
 }
-
-export { Navmenu }
