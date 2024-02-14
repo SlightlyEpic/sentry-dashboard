@@ -1,6 +1,7 @@
 import { Navmenu } from '@/components/Navmenu';
 import { RouteObject, Outlet, useLoaderData, LoaderFunction } from 'react-router-dom';
 import { ExtractRouteParams } from '@/util/typeMagic';
+import { routerData as generalRouterData } from './general/General';
 
 export const routerData: RouteObject = {
     path: 'settings/:serverId/',
@@ -11,7 +12,8 @@ export const routerData: RouteObject = {
             index: true,
             element: <Index />,
             loader: loader as unknown as LoaderFunction
-        }
+        },
+        generalRouterData
     ]
 }
 

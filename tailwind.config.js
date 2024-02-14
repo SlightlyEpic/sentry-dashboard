@@ -10,6 +10,7 @@ export default {
       colors: {
         'blurple': '#5865f2',
         'blurple-l': '#707ae6',
+        'blurple-ll': '#828bed',
         'bgdark': '#17181a',
         'bgdark-l': '#242629',
       }
