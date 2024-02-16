@@ -17,8 +17,11 @@ type NavmenuItemProps = {
 }
 
 function NavmenuItem(props: NavmenuItemProps) {
-    return <Link to={`/settings/${props.serverId}/${props.to}`} className='flex flex-row items-center justify-start bg-bgdark hover:bg-bggrey-l transition-colors duration-200 w-full gap-4 p-2 rounded-md
-    cursor-pointer'>
+    return <Link 
+        to={`/settings/${props.serverId}/${props.to}`} 
+        className='flex flex-row items-center justify-start bg-transparent hover:bg-blurple hover:ring-1 hover:ring-white 
+        w-full gap-4 p-2 rounded-md cursor-pointer transition-all duration-200'
+    >
         {props.children}
         <div>{props.name}</div>
     </Link>
@@ -44,6 +47,7 @@ export function Navmenu({ serverId }: NavmenuProps) {
     return (
         <div className={
                 'text-white w-full absolute md:sticky self-start top-0 z-20 bg-bgdark flex flex-col items-center h-full md:min-w-80 md:w-80 p-4 font-mono transition-transform duration-500 ' +
+                'backdrop-blur-sm bg-opacity-50 ' +
                 (expanded ? '' : '-translate-x-full')
         }>
             {/* <img src='/waves/vertical-blurple-dark-waves.svg' alt='' className='object-cover w-full h-full absolute left-0 top-0 -z-10' /> */}
@@ -56,12 +60,12 @@ export function Navmenu({ serverId }: NavmenuProps) {
                 
                 <div className='mt-2 text-white self-center border border-bgdark-l w-full flex justify-center items-center flex-col'>
                     <div>
-                        <Avatar image='https://cdn.discordapp.com/avatars/219806114420752384/b87f6ff3b17560161b06b2330df48fb5?size=512' size='md'></Avatar>
+                        <Avatar image='https://cdn.discordapp.com/avatars/219806114420752384/b87f6ff3b17560161b06b2330df48fb5?size=512' size='md' />
                         username
                     </div>
                     <button className='bg-bgdark-l hover:bg-blurple transition-colors duration-200 w-full'>Logout</button>
                 </div>
-                <Link to={`/settings/${serverId}`} className='mt-2 mb-2 bg-blurple w-24 rounded-full hover:hue-rotate-15 transition-colors duration-200 self-center flex items-center justify-center gap-1'>
+                <Link to={`/settings/${serverId}`} className='mt-2 mb-2 bg-blurple w-24 rounded-full hover:bg-bgdark hover:ring-1 hover:ring-white self-center flex items-center justify-center gap-1'>
                     <HomeIcon className='w-4 h-4' /> Home
                 </Link>
                 <div className='w-full border border-white' />

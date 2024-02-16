@@ -17,7 +17,7 @@ body {
 }
 
 #root {
-    @apply h-full w-full
+    @apply h-full w-full relative
 }
 
 /* width */
