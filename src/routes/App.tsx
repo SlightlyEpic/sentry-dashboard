@@ -1,7 +1,8 @@
-import { Header } from '@/components/Header';
 import { RouteObject } from 'react-router-dom';
 
+import { Header } from '@/components/Header';
 import DiscordSignInButton from '@/components/buttons/DiscordSignIn';
+import { Footer } from '@/components/Footer';
 
 export const routerData: RouteObject = {
     path: '/',
@@ -9,13 +10,6 @@ export const routerData: RouteObject = {
 }
 
 export default function App() {
-    const footerLinks: [name: string, path: string][] = [
-        ['Invite', '/invite'],
-        ['Support', '/support'],
-        ['Terms of Service', '/tos'],
-        ['Privacy Policy', '/privacy']
-    ];
-
     return (
         <>
             <div className='flex flex-col h-screen text-white'>
@@ -46,17 +40,7 @@ export default function App() {
                     </div>
                 </div>
 
-                <div className='flex items-center justify-center'>
-                    <div className='hidden sm:flex justify-end p-2'>
-                        {footerLinks.map((v, i) => (
-                            <a key={i} className='text-blue-500 text-sm pl-3 pr-3 hover:text-blue-300' href={v[1]}>
-                                <div className='flex gap-2'>
-                                    {v[0]}
-                                </div>
-                            </a>
-                        ))}
-                    </div>
-                </div>
+                <Footer />
             </div>
         </>
     )

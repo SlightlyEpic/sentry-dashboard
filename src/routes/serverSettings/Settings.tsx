@@ -1,8 +1,12 @@
-import { Navmenu } from '@/components/Navmenu';
-import { Header } from '@/components/Header';
 import { RouteObject, Outlet, useLoaderData, LoaderFunction } from 'react-router-dom';
 import { ExtractRouteParams } from '@/util/typeMagic';
 import { routerData as generalRouterData } from './general/General';
+import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
+
+import { Navmenu } from '@/components/Navmenu';
+import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
+import SettingCard from '@/components/SettingCard';
 
 export const routerData: RouteObject = {
     path: 'settings/:serverId/',
@@ -29,27 +33,78 @@ export async function loader({ params }: { params: RouteParams }) {
 
 function Index() {
     const loaderData = useLoaderData() as LoaderData;
-    console.log('loader data:', loaderData);
 
-    return <div className='text-white'>Index: {loaderData.serverId}</div>;
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 justify-start h-fit w-full [&>*]:place-self-center">
+            <SettingCard
+                settingName='General Settings'
+                to={`/settings/${loaderData.serverId}/general`}
+                icon={<Cog6ToothIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Edit General Settings'
+            >
+                Configure settings like prefix and moderation stats.
+            </SettingCard>
+            <SettingCard
+                settingName='Punishments'
+                to={`/settings/${loaderData.serverId}/punishments`}
+                icon={<FireIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Punishments'
+            >
+                Add, remove or edit existing punishment actions which are triggered automatically by the bot.
+            </SettingCard>
+            <SettingCard
+                settingName='Permits'
+                to={`/settings/${loaderData.serverId}/permits`}
+                icon={<KeyIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Permits'
+            >
+                Add, remove or edit existing permits to grant or revoke access to certain commands of the bot to different users or roles.
+            </SettingCard>
+            <SettingCard
+                settingName='Ad Warnings'
+                to={`/settings/${loaderData.serverId}/adwarn`}
+                icon={<ExclamationTriangleIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Ad Moderation Settings'
+            >
+                Configure settings related to advertisment warnings and advertisment moderation.
+            </SettingCard>
+            <SettingCard
+                settingName='Reports'
+                to={`/settings/${loaderData.serverId}/reports`}
+                icon={<NewspaperIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure settings related to the bot's reporting system.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+        </div>
+    )
 }
 
 export default function Settings() {
     const loaderData = useLoaderData() as LoaderData;
-    console.log('loaderData:', loaderData);
 
-    
-
-    return (
-        <div className="flex flex-col items-center justify-start w-full h-full bg-bgdark">
+    return <>
+        <img src='/waves/blob-blurple.svg' className='absolute w-full h-full object-cover -z-10' />
+        {/* <img src='/waves/blue.svg' className='absolute w-full h-full object-cover -z-10' /> */}
+        <div className='flex flex-col items-center justify-start w-full h-full'>
             <Header />
 
-            <div className='flex justify-center w-full max-w-screen-xl overflow-y-scroll'>
+            <div className='flex justify-center w-full max-w-screen-xl overflow-y-scroll flex-grow'>
                 <Navmenu serverId={loaderData.serverId} />
-                <div className='w-full h-full'>
+                <div className='w-full h-full bg-bgdark bg-opacity-50 backdrop-blur-sm'>
                     <Outlet />
                 </div>
             </div>
+
+            <Footer />
         </div>
-    )
+    </>
 }
