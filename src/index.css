@@ -8,8 +8,39 @@
     box-sizing: border-box;
 }
 
+html {
+    @apply h-screen w-screen
+}
+
 body {
-    @apply bg-bgdark
+    @apply bg-bgdark h-full w-full
+}
+
+#root {
+    @apply h-full w-full
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: '#17181a';
+    border-radius: 100px;
+
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 100rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .font-rubik {

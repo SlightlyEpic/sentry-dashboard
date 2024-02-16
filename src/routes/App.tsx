@@ -1,5 +1,4 @@
-import React from 'react';
-import { UserGroupIcon, PlusCircleIcon, StarIcon, CloudIcon } from '@heroicons/react/24/outline';
+import { Header } from '@/components/Header';
 import { RouteObject } from 'react-router-dom';
 
 import DiscordSignInButton from '@/components/buttons/DiscordSignIn';
@@ -10,14 +9,6 @@ export const routerData: RouteObject = {
 }
 
 export default function App() {
-    const headerLinks: [icon: React.ReactElement, name: string, path: string][] = [
-        [<UserGroupIcon className='h-6 w-6' />, 'Settings', '/settings'],
-        [<UserGroupIcon className='h-6 w-6' />, 'Team', '/team'],
-        [<PlusCircleIcon className='h-6 w-6' />, 'Invite', '/invite'],
-        [<StarIcon className='h-6 w-6' />, 'Premium', '/premium'],
-        [<CloudIcon className='h-6 w-6' />, 'Support', '/support']
-    ];
-
     const footerLinks: [name: string, path: string][] = [
         ['Invite', '/invite'],
         ['Support', '/support'],
@@ -30,17 +21,7 @@ export default function App() {
             <div className='flex flex-col h-screen text-white'>
                 <img src='/waves/blurple-transparent-waves.svg' alt='' className='object-cover absolute -z-10 w-full h-full' />
 
-                <div className='hidden sm:flex justify-end items-center p-2 bg-bgdark border-b-bgdark-l border-b-2'>
-                    {headerLinks.map(v => (
-                        <a key={v[2]} className='text-blue-500 font-medium pl-3 pr-3 hover:text-blue-300' href={v[2]}>
-                            <div className='flex gap-2'>
-                                {v[0]} {v[1]}
-                            </div>
-                        </a>
-                    ))}
-                
-                    <button className='ml-3 bg-blurple h-8 w-20 rounded-md text-sm hover:bg-blurple-ll transition-colors duration-200'>Log In</button>
-                </div>
+                <Header />
             
                 <div className='flex items-center justify-evenly flex-col lg:flex-row p-8 gap-8 h-full'>
                     <div className='flex flex-col w-1/3 gap-8'>

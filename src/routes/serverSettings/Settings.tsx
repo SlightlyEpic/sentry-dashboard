@@ -1,4 +1,5 @@
 import { Navmenu } from '@/components/Navmenu';
+import { Header } from '@/components/Header';
 import { RouteObject, Outlet, useLoaderData, LoaderFunction } from 'react-router-dom';
 import { ExtractRouteParams } from '@/util/typeMagic';
 import { routerData as generalRouterData } from './general/General';
@@ -37,12 +38,15 @@ export default function Settings() {
     const loaderData = useLoaderData() as LoaderData;
     console.log('loaderData:', loaderData);
 
+    
+
     return (
-        <div className="flex justify-center min-h-screen bg-bggrey">
-            <div className='flex justify-center w-full max-w-screen-xl'>
-                {/* <Navmenu serverId={loaderData.serverId} /> */}
+        <div className="flex flex-col items-center justify-start w-full h-full bg-bgdark">
+            <Header />
+
+            <div className='flex justify-center w-full max-w-screen-xl overflow-y-scroll'>
                 <Navmenu serverId={loaderData.serverId} />
-                <div className='w-full h-full relative'>
+                <div className='w-full h-full'>
                     <Outlet />
                 </div>
             </div>

@@ -43,7 +43,7 @@ export function Navmenu({ serverId }: NavmenuProps) {
 
     return (
         <div className={
-                'text-white w-screen absolute md:relative z-20 bg-bgdark flex flex-col items-center h-screen md:min-w-80 md:w-80 p-4 font-mono transition-transform duration-500 ' +
+                'text-white w-full absolute md:sticky self-start top-0 z-20 bg-bgdark flex flex-col items-center h-full md:min-w-80 md:w-80 p-4 font-mono transition-transform duration-500 ' +
                 (expanded ? '' : '-translate-x-full')
         }>
             {/* <img src='/waves/vertical-blurple-dark-waves.svg' alt='' className='object-cover w-full h-full absolute left-0 top-0 -z-10' /> */}
@@ -61,7 +61,7 @@ export function Navmenu({ serverId }: NavmenuProps) {
                     </div>
                     <button className='bg-bgdark-l hover:bg-blurple transition-colors duration-200 w-full'>Logout</button>
                 </div>
-                <Link to='/' className='mt-2 mb-2 bg-blurple border border-white w-24 rounded-full hover:hue-rotate-15 transition-colors duration-200 self-center flex items-center justify-center gap-1'>
+                <Link to={`/settings/${serverId}`} className='mt-2 mb-2 bg-blurple border border-white w-24 rounded-full hover:hue-rotate-15 transition-colors duration-200 self-center flex items-center justify-center gap-1'>
                     <HomeIcon className='w-4 h-4' /> Home
                 </Link>
                 <div className='w-full border border-white' />
