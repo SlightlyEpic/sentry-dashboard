@@ -10,7 +10,7 @@ interface CardProps {
 
 const SettingCard = ({ icon, settingName, children, to }: CardProps) => {
     return (
-        <div className="m-10 min-w-64 min-h-72 f h-fit bg-bgdark-l opacity-95 text-white p-2 max-w-80 flex flex-col rounded-lg">
+        <div className="w-full h-full min-w-64 bg-bgdark-l opacity-95 text-white p-2 flex flex-col rounded-md max-w-md">
             <div className=" p-1 sm:p-2 flex flex-row items-center">
                 {icon}
                 <div className="text-3xl p-1 sm:text-4xl sm:p-2 font-bold">
