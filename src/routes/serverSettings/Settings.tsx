@@ -38,11 +38,13 @@ export default function Settings() {
     console.log('loaderData:', loaderData);
 
     return (
-        <div className="flex justify-start min-h-screen bg-bgdark">
-            {/* <Navmenu serverId={loaderData.serverId} /> */}
-            <Navmenu serverId={loaderData.serverId} />
-            <div className='w-full h-full relative'>
-                <Outlet />
+        <div className="flex justify-center min-h-screen bg-bggrey">
+            <div className='flex justify-center w-full max-w-screen-xl'>
+                {/* <Navmenu serverId={loaderData.serverId} /> */}
+                <Navmenu serverId={loaderData.serverId} />
+                <div className='w-full h-full relative'>
+                    <Outlet />
+                </div>
             </div>
         </div>
     )
