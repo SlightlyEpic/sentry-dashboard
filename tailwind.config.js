@@ -13,6 +13,8 @@ export default {
         'blurple-ll': '#828bed',
         'bgdark': '#17181a',
         'bgdark-l': '#242629',
+        'bggrey': '#202831',
+        'bggrey-l': '#283039',
       }
     },
   },
