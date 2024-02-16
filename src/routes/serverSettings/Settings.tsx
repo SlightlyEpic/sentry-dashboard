@@ -41,7 +41,7 @@ export default function Settings() {
         <div className="flex justify-center min-h-screen bg-bggrey">
             <div className='flex justify-center w-full max-w-screen-xl'>
                 {/* <Navmenu serverId={loaderData.serverId} /> */}
-                <Navmenu />
+                <Navmenu serverId={loaderData.serverId} />
                 <div className='w-full h-full relative'>
                     <Outlet />
                 </div>
