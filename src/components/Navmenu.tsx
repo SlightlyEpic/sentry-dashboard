@@ -61,7 +61,7 @@ export function Navmenu({ serverId }: NavmenuProps) {
                     </div>
                     <button className='bg-bgdark-l hover:bg-blurple transition-colors duration-200 w-full'>Logout</button>
                 </div>
-                <Link to={`/settings/${serverId}`} className='mt-2 mb-2 bg-blurple border border-white w-24 rounded-full hover:hue-rotate-15 transition-colors duration-200 self-center flex items-center justify-center gap-1'>
+                <Link to={`/settings/${serverId}`} className='mt-2 mb-2 bg-blurple w-24 rounded-full hover:hue-rotate-15 transition-colors duration-200 self-center flex items-center justify-center gap-1'>
                     <HomeIcon className='w-4 h-4' /> Home
                 </Link>
                 <div className='w-full border border-white' />
