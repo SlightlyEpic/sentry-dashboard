@@ -6,11 +6,15 @@ import './index.css';
 import { store } from './redux/store';
 
 import { routerData as appRouterData } from '@/routes/App';
+import { routerData as loginRouterData } from '@/routes/Login';
+import { routerData as logoutRouterData } from '@/routes/Logout';
 import { routerData as serverSelectorRouterData } from '@/routes/settings/ServerSelector';
 import { routerData as settingsRouterData } from '@/routes/serverSettings/Settings';
 
 const router = createBrowserRouter([
     appRouterData,
+    loginRouterData,
+    logoutRouterData,
     serverSelectorRouterData,
     settingsRouterData,
 ]);

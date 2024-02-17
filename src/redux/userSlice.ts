@@ -17,6 +17,7 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action: PayloadAction<UserState>) => {
+            state.isAuthenticated = action.payload.isAuthenticated;
             state.username = action.payload.username;
             state.image = action.payload.image;
         },

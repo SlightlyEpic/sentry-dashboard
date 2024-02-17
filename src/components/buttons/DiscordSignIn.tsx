@@ -1,6 +1,6 @@
 export default function DiscordSignInButton() {
     return (
-        <button className='flex w-32 h-8 text-black text-sm border-[1px] border-gray-300 hover:border-blurple-l hover:text-blurple-l transition-colors duration-200 items-center justify-center bg-gray-50 rounded-md p-4'>
+        <a href='/api/auth/discord' className='flex w-32 h-8 text-black text-sm border-[1px] border-gray-300 hover:border-blurple-l hover:text-blurple-l transition-colors duration-200 items-center justify-center bg-gray-50 rounded-md p-4'>
             <div className='flex w-full items-center justify-evenly'>
                 <svg width="1.25rem" height="1.25rem" viewBox="0 -7 71 71" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g fill="#5865f2">
@@ -9,6 +9,6 @@ export default function DiscordSignInButton() {
                 </svg>
                 Login
             </div>
-        </button>
+        </a>
     )
 }

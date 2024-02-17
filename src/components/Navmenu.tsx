@@ -3,6 +3,7 @@ import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIco
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar } from './Avatar';
+import { useAppSelector } from '@/redux/hooks';
 
 
 export type NavmenuProps = {
@@ -42,7 +43,8 @@ function ExpanderArrow(expanded: boolean, setExpanded: React.Dispatch<React.SetS
 }
 
 export function Navmenu({ serverId }: NavmenuProps) {
-    let [expanded, setExpanded] = useState(true);
+    const [expanded, setExpanded] = useState(true);
+    const user = useAppSelector(state => state.user);
 
     return (
         <div className={
@@ -60,12 +62,13 @@ export function Navmenu({ serverId }: NavmenuProps) {
                 
                 <div className='mt-2 text-white self-center border border-bgdark-l w-full flex justify-center items-center flex-col'>
                     <div>
-                        <Avatar image='https://cdn.discordapp.com/avatars/219806114420752384/b87f6ff3b17560161b06b2330df48fb5?size=512' size='md' />
-                        username
+                        {/* <Avatar image='https://cdn.discordapp.com/avatars/219806114420752384/b87f6ff3b17560161b06b2330df48fb5?size=512' size='md' /> */}
+                        <Avatar image={user.image!} size='md' />
+                        {user.username}
                     </div>
-                    <button className='bg-bgdark-l hover:bg-blurple transition-colors duration-200 w-full'>Logout</button>
+                    <Link to='/logout' className='bg-bgdark-l hover:bg-blurple transition-colors duration-200 w-full text-center'>Logout</Link>
                 </div>
-                <Link to={`/settings/${serverId}`} className='mt-2 mb-2 bg-blurple w-24 rounded-full hover:bg-bgdark hover:ring-1 hover:ring-white self-center flex items-center justify-center gap-1'>
+                <Link to={`/settings/${serverId}`} className='mt-2 mb-2 bg-blurple w-24 rounded-full hover:bg-bgdark hover:ring-1 hover:ring-blurple self-center flex items-center justify-center gap-1'>
                     <HomeIcon className='w-4 h-4' /> Home
                 </Link>
                 <div className='w-full border border-white' />
