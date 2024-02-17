@@ -1,4 +1,4 @@
-import { RouteObject, Outlet, useLoaderData, LoaderFunction } from 'react-router-dom';
+import { RouteObject, Outlet, useLoaderData, LoaderFunction, useNavigate } from 'react-router-dom';
 import { ExtractRouteParams } from '@/util/typeMagic';
 import { routerData as generalRouterData } from './general/General';
 import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
@@ -7,6 +7,8 @@ import { Navmenu } from '@/components/Navmenu';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import SettingCard from '@/components/SettingCard';
+import { useAppSelector } from '@/redux/hooks';
+import { useEffect } from 'react';
 
 export const routerData: RouteObject = {
     path: 'settings/:serverId/',
@@ -90,6 +92,15 @@ function Index() {
 
 export default function Settings() {
     const loaderData = useLoaderData() as LoaderData;
+    const navigate = useNavigate();
+
+    const user = useAppSelector(state => state.user);
+    
+    useEffect(() => {
+        if(!user.isAuthenticated) navigate('/settings', { replace: true });
+    }, [user, navigate]);
+
+    if(!user.isAuthenticated) return <></>
 
     return <>
         <img src='/waves/blob-blurple.svg' className='absolute w-full h-full object-cover -z-10' />
