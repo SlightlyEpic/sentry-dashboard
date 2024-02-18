@@ -27,5 +27,5 @@ export type SetReportStatusPayload = { status: boolean };
 export type SetReportsChannelPayload = { channel: string };
 
 export type AnyPayload = SetPrefixPayload | AddPunishmentPayload | RemovePunishmentPayload | AddPermitPayload | RemovePermitPayload
-    | SetPermissionsPayload | SetRolesPayload | SetAdwarnStatusPayload | SetAdwarnChannelPayload | SetAdwarnDmStatusPayload | SetAdwarnMessagePayload
-    | SetReportStatusPayload | SetReportsChannelPayload
+    | SetPermissionsPayload | SetRolesPayload | SetAdwarnStatusPayload | SetAdwarnChannelPayload | SetAdwarnDmStatusPayload
+    | SetAdwarnMessagePayload | SetReportStatusPayload | SetReportsChannelPayload;
