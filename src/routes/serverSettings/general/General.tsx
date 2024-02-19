@@ -1,3 +1,4 @@
+import BooleanInput from '@/components/BooleanInput';
 import StringInput from '@/components/StringInput';
 import { useState } from 'react';
 import { RouteObject } from 'react-router-dom';
@@ -19,6 +20,7 @@ export default function GeneralSettings() {
     const onSave = () => {
         setEdit(!isEdit);
     }
+
     const prefix = 'p';
     return (
         <div className="justify-start flex my-4 flex-col h-fit w-full bg-bgdark-l rounded-md border-2  border-bggrey-l text-white">
@@ -35,20 +37,9 @@ export default function GeneralSettings() {
 
                 <li className='items-center p-2 m-2'>
                     <div className='text-xl p-2 m-2'>Moderation Stats</div>
-                    
-                    <div className='flex justify-between border border-bggrey-ll p-2 rounded-md bg-bgdark m-2'>
-                        <div className='place-self-center'>
-                            clear 
-                        </div>
-                        
-                        
-                        <button type="button" className='text-white self-start mt-auto bg-blurple hover:bg-bgdark
-                                            hover:ring-2 hover:ring-blurple-l rounded-md text-md font-bold px-4 py-1'
-                        >
-                            Edit
-                        </button>
-                    </div>
+                    <BooleanInput onSave={onSave} onEdit={onEdit} isEdit={isEdit} name={prefix} />
 
+                    
 
                 </li>
                 <li className='items-center p-2 m-2'>
