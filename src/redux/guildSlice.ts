@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type * as GR from '@/types/payloads';
 import { GuildSettings } from '@/types/db';
 
-type GuildSettingsState = GuildSettings | null;
+type GuildState = GuildSettings | null;
 
-const initialState = null as GuildSettingsState;
+const initialState = null as GuildState;
 
-export const guildSettingsSlice = createSlice({
+export const guildSlice = createSlice({
     name: 'guildSettings',
     initialState,
     reducers: {
@@ -94,6 +94,6 @@ export const {
     setAdWarnMessage,
     setReportsStatus,
     setReportsChannel
-} = guildSettingsSlice.actions;
+} = guildSlice.actions;
 
-export default guildSettingsSlice.reducer;
+export default guildSlice.reducer;
