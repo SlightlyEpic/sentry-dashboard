@@ -79,6 +79,21 @@ export const guildSettingsSlice = createSlice({
     }
 });
 
-// export const { login, logout } = guildSettingsSlice.actions;
+export const {
+    setAllSettings,
+    setPrefix,
+    addPunishment,
+    removePunishment,
+    addPermit,
+    removePermit,
+    setPermitPermissions,
+    setPermitRoles,
+    setAdWarnStatus,
+    setAdWarnChannel,
+    setAdWarnDmStatus,
+    setAdWarnMessage,
+    setReportsStatus,
+    setReportsChannel
+} = guildSettingsSlice.actions;
 
 export default guildSettingsSlice.reducer;
