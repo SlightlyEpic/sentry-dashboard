@@ -79,6 +79,8 @@ export type Menu = {
     id: string
 }
 
+export type Report = unknown;
+
 export type GuildSettings = {
     adwarning_settings: AdWarn
     mod_stats: {
@@ -97,4 +99,9 @@ export type GuildSettings = {
         menus: Menu[]
     }
     premium: Premium
+    reports: {
+        status: boolean
+        channel: string | null
+        data: Report[]
+    }
 };
