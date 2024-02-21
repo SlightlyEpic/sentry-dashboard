@@ -2,79 +2,91 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type * as GR from '@/types/payloads';
 import { GuildSettings } from '@/types/db';
 
-type GuildState = GuildSettings | null;
+type GuildState = {
+    guildId: string | null
+    data: GuildSettings | null
+}
 
-const initialState = null as GuildState;
+const initialState = {
+    guildId: null,
+    data: null
+} as GuildState;
 
 export const guildSlice = createSlice({
     name: 'guildSettings',
     initialState,
     reducers: {
+        setGuildId: (state, action: PayloadAction<string>) => {
+            if(state.guildId !== action.payload) {
+                state.guildId = action.payload;
+                state.data = null;
+            }
+        },
         setAllSettings: (state, action: PayloadAction<GuildSettings>) => {
-            state = action.payload;
+            state.data = action.payload;
         },
         setPrefix: (state, action: PayloadAction<GR.SetPrefixPayload>) => {
-            if(!state) return;
-            state.prefix = action.payload.prefix;
+            if(!state.data) return;
+            state.data.prefix = action.payload.prefix;
         },
         addPunishment: (state, action: PayloadAction<GR.AddPunishmentPayload>) => {
-            if(!state) return;
-            state.warn_punishments.push(action.payload);
+            if(!state.data) return;
+            state.data.warn_punishments.push(action.payload);
         },
         removePunishment: (state, action: PayloadAction<GR.RemovePunishmentPayload>) => {
-            if(!state) return;
-            state.warn_punishments = state.warn_punishments.filter(p => {
+            if(!state.data) return;
+            state.data.warn_punishments = state.data.warn_punishments.filter(p => {
                 // @ts-expect-error This is totally OK
                 return Object.keys(p).some(k => p[k] !== action.payload[k])
             });
         },
         addPermit: (state, action: PayloadAction<GR.AddPermitPayload>) => {
-            if(!state) return;
-            state.custom_permits.push(action.payload);
+            if(!state.data) return;
+            state.data.custom_permits.push(action.payload);
         },
         removePermit: (state, action: PayloadAction<GR.RemovePermitPayload>) => {
-            if(!state) return;
-            state.custom_permits = state.custom_permits.filter(p => p.name !== action.payload.permitName);
+            if(!state.data) return;
+            state.data.custom_permits = state.data.custom_permits.filter(p => p.name !== action.payload.permitName);
         },
         setPermitPermissions: (state, action: PayloadAction<GR.SetPermissionsPayload>) => {
-            if(!state) return;
-            for(let i = 0; i < state.custom_permits.length; i++) {
-                if(state.custom_permits[i].name === action.payload.permitName) {
-                    state.custom_permits[i].permissions = action.payload.permissions;
+            if(!state.data) return;
+            for(let i = 0; i < state.data.custom_permits.length; i++) {
+                if(state.data.custom_permits[i].name === action.payload.permitName) {
+                    state.data.custom_permits[i].permissions = action.payload.permissions;
                 }
             }
         },
         setPermitRoles: (state, action: PayloadAction<GR.SetRolesPayload>) => {
-            if(!state) return;
-            for(let i = 0; i < state.custom_permits.length; i++) {
-                if(state.custom_permits[i].name === action.payload.permitName) {
-                    state.custom_permits[i].roles = action.payload.roles;
+            if(!state.data) return;
+            for(let i = 0; i < state.data.custom_permits.length; i++) {
+                if(state.data.custom_permits[i].name === action.payload.permitName) {
+                    state.data.custom_permits[i].roles = action.payload.roles;
                 }
             }
         },
         setAdWarnStatus: (state, action: PayloadAction<GR.SetAdwarnStatusPayload>) => {
-            if(!state) return;
-            state.adwarning_settings.status = action.payload.status;
+            if(!state.data) return;
+            state.data.adwarning_settings.status = action.payload.status;
         },
         setAdWarnChannel: (state, action: PayloadAction<GR.SetAdwarnChannelPayload>) => {
-            if(!state) return;
-            state.adwarning_settings.channel = action.payload.channel;
+            if(!state.data) return;
+            state.data.adwarning_settings.channel = action.payload.channel;
         },
         setAdWarnDmStatus: (state, action: PayloadAction<GR.SetAdwarnDmStatusPayload>) => {
-            if(!state) return;
-            state.adwarning_settings.send_dm = action.payload.status;
+            if(!state.data) return;
+            state.data.adwarning_settings.send_dm = action.payload.status;
         },
         setAdWarnMessage: (state, action: PayloadAction<GR.SetAdwarnMessagePayload>) => {
-            if(!state) return;
-            state.adwarning_settings.message_template = action.payload.message
+            if(!state.data) return;
+            state.data.adwarning_settings.message_template = action.payload.message
         },
         setReportsStatus: (state, action: PayloadAction<GR.SetReportStatusPayload>) => {
-            if(!state) return;
-            state.reports.status = action.payload.status;
+            if(!state.data) return;
+            state.data.reports.status = action.payload.status;
         },
         setReportsChannel: (state, action: PayloadAction<GR.SetReportsChannelPayload>) => {
-            if(!state) return;
-            state.reports.channel = action.payload.channel;
+            if(!state.data) return;
+            state.data.reports.channel = action.payload.channel;
         }
     }
 });
