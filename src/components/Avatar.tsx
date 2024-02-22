@@ -1,6 +1,7 @@
 type AvatarProps = {
     image: string
     size: 'sm' | 'md' | 'lg' | 'xl'
+    style?: string
 }
 
 export function Avatar(props: AvatarProps) {
@@ -11,5 +12,5 @@ export function Avatar(props: AvatarProps) {
         'xl': 'w-16 h-16',
     };
 
-    return <img src={props.image} className={'m-2 inline rounded-full ' + sizes[props.size]} />
+    return <img src={props.image} className={'m-2 inline rounded-full ' + sizes[props.size] + ' ' + (props.style || '')} />
 }
