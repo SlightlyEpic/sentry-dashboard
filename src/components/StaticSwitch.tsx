@@ -6,7 +6,7 @@ export default function StaticSwitch({ state }: StaticSwitchProps) {
     return (
     <div
         className={
-            'h-full aspect-[2] rounded-full overflow-hidden cursor-not-allowed transition-all duration-500 ' +
+            'h-full aspect-[2] rounded-full overflow-hidden cursor-not-allowed transition-all duration-500 brightness-50 ' +
             (state ? 'bg-green-500 ring-1 ring-white' : 'bg-bgdark-l ring-1 ring-blurple')
         }
     >
