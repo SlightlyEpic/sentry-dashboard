@@ -31,7 +31,7 @@ function ExpanderArrow(expanded: boolean, setExpanded: React.Dispatch<React.SetS
     return <>
         <div 
             className={
-                'mt-2 visible md:hidden absolute left-full top-0 z-10 flex items-center justify-center w-12 h-12 bg-bgdark rounded-r-md transition-transform duration-500 ' +
+                'mt-2 visible md:hidden absolute left-full top-0 z-10 flex items-center justify-center w-12 h-12 bg-transparent rounded-r-md transition-transform duration-500 ' +
                 (expanded ? '-translate-x-full' : '')
             }
             onClick={() => setExpanded(expanded => !expanded)}
@@ -47,7 +47,7 @@ export function Navmenu({ serverId }: NavmenuProps) {
     return (
         <div className={
                 'text-white w-full absolute md:sticky self-start top-0 z-20 bg-bgdark flex flex-col items-center h-full md:min-w-80 md:w-80 p-4 font-mono transition-transform duration-500 ' +
-                'backdrop-blur-sm bg-opacity-50 ' +
+                'backdrop-blur-lg bg-opacity-75 md:backdrop-blur-sm md:bg-opacity-50 ' +
                 (expanded ? '' : '-translate-x-full')
         }>
             {/* <img src='/waves/vertical-blurple-dark-waves.svg' alt='' className='object-cover w-full h-full absolute left-0 top-0 -z-10' /> */}

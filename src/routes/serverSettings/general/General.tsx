@@ -23,26 +23,26 @@ export default function GeneralSettings() {
 
     const prefix = 'p';
     return (
-        <div className="justify-start flex my-4 flex-col h-fit w-full bg-bgdark-l rounded-md border-2  border-bggrey-l text-white">
+        <div className="flex flex-col h-fit w-full text-white">
 
             <div className='self-center h-fit w-fit p-2 m-2 text-4xl'>General Settings</div>
 
-            <ul className='p-2 m-2'>
+            <div className='p-2 m-2'>
 
-                <li className='items-center p-2 m-2'>
+                <div className='items-center p-2 m-2'>
                     <div className='text-xl p-2 m-2'>Prefix</div>
                     
                     <StringInput onSave={onSave} onEdit={onEdit} isEdit={isEdit} text={prefix} />
-                </li>
+                </div>
 
-                <li className='items-center p-2 m-2'>
+                <div className='items-center p-2 m-2'>
                     <div className='text-xl p-2 m-2'>Moderation Stats</div>
                     <BooleanInput onSave={onSave} onEdit={onEdit} isEdit={isEdit} name={prefix} />
 
                     
 
-                </li>
-                <li className='items-center p-2 m-2'>
+                </div>
+                <div className='items-center p-2 m-2'>
                     
                     <div className='text-xl p-2 m-2'>Compact Response</div>
                     
@@ -58,8 +58,8 @@ export default function GeneralSettings() {
                             Edit
                         </button>
                     </div>
-                </li>
-                <li className='items-center justify-start flex p-2 m-2 text-xl'>
+                </div>
+                <div className='items-center justify-start flex p-2 m-2 text-xl'>
                     <div className='p-2 m-2'>
                         Premium
                         
@@ -67,8 +67,8 @@ export default function GeneralSettings() {
                     <div>
                         YES
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
 
         </div>
     )

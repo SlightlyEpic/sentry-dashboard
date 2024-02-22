@@ -84,6 +84,134 @@ function Index() {
             >
                 Configure messages and embed templates to be used by the bot as responses across your server.
             </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
+            <SettingCard
+                settingName='Message Templates'
+                to={`/settings/${loaderData.serverId}/messages`}
+                icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
+                buttonText='Configure Reports'
+            >
+                Configure messages and embed templates to be used by the bot as responses across your server.
+            </SettingCard>
         </div>
     )
 }
@@ -99,7 +227,7 @@ export default function Settings() {
 
             <div className='flex justify-center w-full max-w-screen-xl overflow-y-scroll flex-grow'>
                 <Navmenu serverId={loaderData.serverId} />
-                <div className='w-full h-full bg-bgdark bg-opacity-50 backdrop-blur-sm'>
+                <div className='w-full h-max min-h-full bg-bgdark bg-opacity-50 backdrop-blur-sm'>
                     <Outlet />
                 </div>
             </div>
