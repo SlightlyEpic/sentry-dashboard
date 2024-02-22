@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, HomeIcon } from '@heroicons/react/24/solid';
 import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Avatar } from './Avatar';
 import { useAppSelector } from '@/redux/hooks';
 
@@ -15,13 +15,19 @@ type NavmenuItemProps = {
     to: string
     serverId: string
     children: React.ReactNode
+    pathname: string 
 }
 
 function NavmenuItem(props: NavmenuItemProps) {
+    const to = `/settings/${props.serverId}/${props.to}`;
+
     return <Link 
-        to={`/settings/${props.serverId}/${props.to}`} 
-        className='flex flex-row items-center justify-start bg-transparent hover:bg-blurple hover:ring-1 hover:ring-white 
-        w-full gap-4 p-2 rounded-md cursor-pointer transition-all duration-200'
+        to={to} 
+        className={
+            'flex flex-row items-center justify-start hover:bg-blurple hover:ring-1 hover:ring-white ' +
+            'w-full gap-4 p-2 rounded-md cursor-pointer transition-all duration-200 ' +
+            (props.pathname === to ? 'bg-blurple ring-1 ring-white' : 'bg-transparent')
+        }
     >
         {props.children}
         <div>{props.name}</div>
@@ -32,7 +38,7 @@ function ExpanderArrow(expanded: boolean, setExpanded: React.Dispatch<React.SetS
     return <>
         <div 
             className={
-                'mt-2 visible md:hidden absolute left-full top-0 z-10 flex items-center justify-center w-12 h-12 bg-bgdark rounded-r-md transition-transform duration-500 ' +
+                'mt-2 visible md:hidden absolute left-full top-0 z-10 flex items-center justify-center w-12 h-12 bg-transparent rounded-r-md transition-transform duration-500 ' +
                 (expanded ? '-translate-x-full' : '')
             }
             onClick={() => setExpanded(expanded => !expanded)}
@@ -44,12 +50,13 @@ function ExpanderArrow(expanded: boolean, setExpanded: React.Dispatch<React.SetS
 
 export function Navmenu({ serverId }: NavmenuProps) {
     const [expanded, setExpanded] = useState(true);
+    const location = useLocation();
     const user = useAppSelector(state => state.user);
 
     return (
         <div className={
                 'text-white w-full absolute md:sticky self-start top-0 z-20 bg-bgdark flex flex-col items-center h-full md:min-w-80 md:w-80 p-4 font-mono transition-transform duration-500 ' +
-                'backdrop-blur-sm bg-opacity-50 ' +
+                'backdrop-blur-lg bg-opacity-75 md:backdrop-blur-sm md:bg-opacity-50 ' +
                 (expanded ? '' : '-translate-x-full')
         }>
             {/* <img src='/waves/vertical-blurple-dark-waves.svg' alt='' className='object-cover w-full h-full absolute left-0 top-0 -z-10' /> */}
@@ -73,22 +80,22 @@ export function Navmenu({ serverId }: NavmenuProps) {
                 </Link>
                 <div className='w-full border border-white' />
 
-                <NavmenuItem name='General Settings' serverId={serverId} to='general'>
+                <NavmenuItem pathname={location.pathname} name='General Settings' serverId={serverId} to='general'>
                     <Cog6ToothIcon className='w-6 h-6'></Cog6ToothIcon>
                 </NavmenuItem>
-                <NavmenuItem name='Punishments' serverId={serverId} to='punishments'>
+                <NavmenuItem pathname={location.pathname} name='Punishments' serverId={serverId} to='punishments'>
                     <FireIcon className='w-6 h-6'></FireIcon>
                     </NavmenuItem>
-                <NavmenuItem name='Permits' serverId={serverId} to='permits'>
+                <NavmenuItem pathname={location.pathname} name='Permits' serverId={serverId} to='permits'>
                     <KeyIcon className='w-6 h-6'></KeyIcon>
                 </NavmenuItem>
-                <NavmenuItem name='Advertisment Warnings' serverId={serverId} to='adwarn'>
+                <NavmenuItem pathname={location.pathname} name='Advertisment Warnings' serverId={serverId} to='adwarn'>
                     <ExclamationTriangleIcon className='w-6 h-6'></ExclamationTriangleIcon>
                 </NavmenuItem>
-                <NavmenuItem name='Reports' serverId={serverId} to='reports'>
+                <NavmenuItem pathname={location.pathname} name='Reports' serverId={serverId} to='reports'>
                     <NewspaperIcon className='w-6 h-6'></NewspaperIcon>
                 </NavmenuItem>
-                <NavmenuItem name='Message Templates' serverId={serverId} to='messages'>
+                <NavmenuItem pathname={location.pathname} name='Message Templates' serverId={serverId} to='messages'>
                     <ChatBubbleBottomCenterIcon className='w-6 h-6'></ChatBubbleBottomCenterIcon>
                 </NavmenuItem>
             </div>

@@ -111,7 +111,7 @@ export default function Settings() {
 
             <div className='flex justify-center w-full max-w-screen-xl overflow-y-scroll flex-grow'>
                 <Navmenu serverId={loaderData.serverId} />
-                <div className='w-full h-full bg-bgdark bg-opacity-50 backdrop-blur-sm'>
+                <div className='w-full h-max min-h-full bg-bgdark bg-opacity-50 backdrop-blur-sm'>
                     <Outlet />
                 </div>
             </div>

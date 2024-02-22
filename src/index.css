@@ -28,15 +28,12 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: '#17181a';
-        border-radius: 100px;
-
+        @apply backdrop-blur-sm bg-bgdark bg-opacity-50
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 100rem;
+        @apply bg-[#888] rounded-full
     }
 
     /* Handle on hover */
