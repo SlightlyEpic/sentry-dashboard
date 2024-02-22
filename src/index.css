@@ -4,42 +4,54 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-    box-sizing: border-box;
+@layer base {
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        @apply h-screen w-screen
+    }
+
+    body {
+        @apply bg-bgdark h-full w-full
+    }
+
+    #root {
+        @apply h-full w-full relative
+    }
+
+    /* width */
+    ::-webkit-scrollbar {
+        width: 0.5rem;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        @apply backdrop-blur-sm bg-bgdark bg-opacity-50
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        @apply bg-[#888] rounded-full
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .font-rubik {
+        font-family: "Rubik Mono One", monospace;
+    }
 }
 
-html {
-    @apply h-screen w-screen
-}
+@layer utilities {
+    .animation-delay-166 {
+        animation-delay: 166ms;
+    }
 
-body {
-    @apply bg-bgdark h-full w-full
-}
-
-#root {
-    @apply h-full w-full relative
-}
-
-/* width */
-::-webkit-scrollbar {
-    width: 0.5rem;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    @apply backdrop-blur-sm bg-bgdark bg-opacity-50
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    @apply bg-[#888] rounded-full
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-.font-rubik {
-    font-family: "Rubik Mono One", monospace;
+    .animation-delay-333 {
+        animation-delay: 333ms;
+    }
 }

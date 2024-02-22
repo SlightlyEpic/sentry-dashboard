@@ -41,7 +41,6 @@ export default function GeneralSettings() {
                 </div>
                 <div className='border-t border-bggrey-ll' />
             </div>
-
         </div>
     )
 }
