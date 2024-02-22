@@ -7,14 +7,25 @@ type GuildState = {
     data: GuildSettings | null
 }
 
-const initialState = {
+// const initialState = {
+//     guildId: null,
+//     data: null
+// } as GuildState;
+
+const testInitialState = {
     guildId: null,
-    data: null
+    data: {
+        prefix: 'test',
+        compact_responses: false,
+        mod_stats: {
+            status: true
+        }
+    }
 } as GuildState;
 
 export const guildSlice = createSlice({
     name: 'guildSettings',
-    initialState,
+    initialState: testInitialState,
     reducers: {
         setGuildId: (state, action: PayloadAction<string>) => {
             if(state.guildId !== action.payload) {
@@ -87,7 +98,15 @@ export const guildSlice = createSlice({
         setReportsChannel: (state, action: PayloadAction<GR.SetReportsChannelPayload>) => {
             if(!state.data) return;
             state.data.reports.channel = action.payload.channel;
-        }
+        },
+        setModStatsStatus: (state, action: PayloadAction<{ status: boolean }>) => {
+            if(!state.data) return;
+            state.data.mod_stats.status = action.payload.status;
+        },
+        setCompactRespone: (state, action: PayloadAction<{ status: boolean }>) => {
+            if(!state.data) return;
+            state.data.compact_responses = action.payload.status;
+        },
     }
 });
 
@@ -105,7 +124,9 @@ export const {
     setAdWarnDmStatus,
     setAdWarnMessage,
     setReportsStatus,
-    setReportsChannel
+    setReportsChannel,
+    setModStatsStatus,
+    setCompactRespone,
 } = guildSlice.actions;
 
 export default guildSlice.reducer;

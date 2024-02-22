@@ -5,25 +5,27 @@ import type { SaveStatusProps } from './SaveStatus';
 export interface StringInputProps {
     text: string
     saveToServer: (value: string) => Promise<string>
-    saveToRedux: (value: string) => unknown
-    onSave?: () => void
+    saveToRedux: (value: string) => void
 }
 
-export default function StringInput({ text, onSave, saveToServer, saveToRedux }: StringInputProps) {
+export default function StringInput({ text, saveToServer, saveToRedux }: StringInputProps) {
     const [currText, setCurrText] = useState(text);
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
 
+    const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
+
     const trySave = async () => {
+        if(saveStatus === 'saving') return;
+        clearTimeout(timeoutId);
         try {
             setSaveStatus('saving');
             await saveToServer(currText);
             saveToRedux(currText);
-            if(onSave) onSave();
             setSaveStatus('success');
-            setTimeout(setSaveStatus, 2000, 'idle');
+            setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {
             setSaveStatus('error');
-            setTimeout(setSaveStatus, 2000, 'idle');
+            setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         }
     };
 
@@ -36,12 +38,13 @@ export default function StringInput({ text, onSave, saveToServer, saveToRedux }:
                 className='bg-transparent focus:outline-none w-full font-mono pl-2'
             />
             <SaveStatus status={saveStatus} />
-            <button 
+            <button
                 type="button"
                 onClick={trySave}
                 className={
-                    'bg-green-700 hover:bg-green-500 rounded-md text-md font-bold px-4 py-1 ' +
-                    (currText == text ? 'invisible' : 'visible')
+                    'bg-green-700 rounded-md text-md font-bold px-4 py-1 ' +
+                    (currText === text ? 'cursor-not-allowed brightness-50 ' : 'hover:bg-green-500 ') +
+                    (saveStatus === 'saving' ? 'brightness-50 hover:bg-green-700 ' : '')
                 }
             >
                 Save
