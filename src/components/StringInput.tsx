@@ -33,7 +33,7 @@ export default function StringInput({ text, onSave, saveToServer, saveToRedux }:
                 defaultValue={currText}
                 onChange={e => setCurrText(e.target.value)}
                 maxLength={10}
-                className='bg-transparent focus:outline-none w-full'
+                className='bg-transparent focus:outline-none w-full font-mono'
             />
             <SaveStatus status={saveStatus} />
             <button 
