@@ -1,49 +1,51 @@
+import { useState } from 'react';
+import SaveStatus from './SaveStatus';
+import type { SaveStatusProps } from './SaveStatus';
 
-interface StringInputProps {
-    text: string;
-    onSave: () => void;
-    onEdit: () => void;
-    isEdit: boolean;
+export interface StringInputProps {
+    text: string
+    saveToServer: (value: string) => Promise<string>
+    saveToRedux: (value: string) => unknown
+    onSave?: () => void
 }
 
-const StringInput = ({ text, onSave, onEdit, isEdit }: StringInputProps) => {
+export default function StringInput({ text, onSave, saveToServer, saveToRedux }: StringInputProps) {
+    const [currText, setCurrText] = useState(text);
+    const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
+
+    const trySave = async () => {
+        try {
+            setSaveStatus('saving');
+            await saveToServer(currText);
+            saveToRedux(currText);
+            if(onSave) onSave();
+            setSaveStatus('success');
+            setTimeout(setSaveStatus, 2000, 'idle');
+        } catch(err) {
+            setSaveStatus('error');
+            setTimeout(setSaveStatus, 2000, 'idle');
+        }
+    };
 
     return (
-        <>
-            <div className='flex justify-between border border-bggrey-ll p-2 rounded-md bg-bgdark m-2'>
-                {!isEdit && <>
-                    <div className='place-self-center'>
-                        {text}
-                    </div>
-
-
-                    <button type="button" className='text-white self-start mt-auto bg-blurple hover:bg-bgdark
-                        hover:ring-2 hover:ring-blurple-l rounded-md text-md font-bold px-4 py-1'
-                        onClick={onEdit}
-                    >
-                        Edit
-                    </button>
-                </>
+        <div className='h-12 flex gap-2 items-center text-white border border-bggrey-ll p-2 rounded-md bg-bgdark'>
+            <input 
+                defaultValue={currText}
+                onChange={e => setCurrText(e.target.value)}
+                maxLength={10}
+                className='bg-transparent focus:outline-none w-full'
+            />
+            <SaveStatus status={saveStatus} />
+            <button 
+                type="button"
+                onClick={trySave}
+                className={
+                    'bg-green-700 hover:bg-green-500 rounded-md text-md font-bold px-4 py-1 ' +
+                    (currText == text ? 'invisible' : 'visible')
                 }
-
-                {isEdit &&
-                    <>
-                        <input type="text" className='bg-bggrey-ll rounded-md
-                                focus:outline-none p-1 focus:outline-1 focus:outline-blurple-ll'
-                            id={text}
-                            defaultValue={text}        
-                        />
-                        <button type="button" className='text-white self-start mt-auto bg-blurple hover:bg-bgdark
-                        hover:ring-2 hover:ring-blurple-l rounded-md text-md font-bold px-4 py-1'
-                            onClick={onSave}
-                        >
-                            Save
-                        </button>
-                    </>
-                }
-            </div>
-        </>
+            >
+                Save
+            </button>
+        </div>
     )
 }
-
-export default StringInput
