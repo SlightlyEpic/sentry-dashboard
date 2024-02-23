@@ -42,7 +42,13 @@ const testInitialState = {
                 warningsCount: 5,
                 warningSeverity: 'high'
             },
-        ]
+        ],
+        adwarning_settings: {
+            channel: '1234567890',
+            message_template: null,
+            send_dm: false,
+            status: true
+        }
     }
 } as GuildState;
 

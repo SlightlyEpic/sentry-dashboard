@@ -3,6 +3,7 @@ import { ExtractRouteParams } from '@/util/typeMagic';
 import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 import { routerData as generalRouterData } from './general/General';
 import { routerData as punishmentRouterData } from './punishments/Punishments';
+import { routerData as adwarnRouterData } from './adwarn/AdWarn';
 
 import { Navmenu } from '@/components/Navmenu';
 import { Header } from '@/components/Header';
@@ -21,7 +22,8 @@ export const routerData: RouteObject = {
             loader: loader as unknown as LoaderFunction
         },
         generalRouterData,
-        punishmentRouterData
+        punishmentRouterData,
+        adwarnRouterData
     ]
 }
 
