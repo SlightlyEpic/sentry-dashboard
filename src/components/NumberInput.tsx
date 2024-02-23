@@ -2,14 +2,14 @@ import { useState } from 'react';
 import SaveStatus from './SaveStatus';
 import type { SaveStatusProps } from './SaveStatus';
 
-export interface StringInputProps {
-    text: string
-    saveToServer: (value: string) => Promise<string>
-    saveToRedux: (value: string) => void
+export interface NumberInputProps {
+    value: number
+    saveToServer: (value: number) => Promise<string>
+    saveToRedux: (value: number) => void
 }
 
-export default function StringInput({ text, saveToServer, saveToRedux }: StringInputProps) {
-    const [currText, setCurrText] = useState(text);
+export default function NumberInput({ value, saveToServer, saveToRedux }: NumberInputProps) {
+    const [currValue, setCurrValue] = useState(value);
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
 
     const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
@@ -19,8 +19,8 @@ export default function StringInput({ text, saveToServer, saveToRedux }: StringI
         clearTimeout(timeoutId);
         try {
             setSaveStatus('saving');
-            await saveToServer(currText);
-            saveToRedux(currText);
+            await saveToServer(currValue);
+            saveToRedux(currValue);
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {
@@ -32,8 +32,10 @@ export default function StringInput({ text, saveToServer, saveToRedux }: StringI
     return (
         <div className='h-12 flex gap-2 items-center text-white border border-bggrey-ll p-2 rounded-md bg-bgdark flex-grow'>
             <input 
-                defaultValue={currText}
-                onChange={e => setCurrText(e.target.value)}
+                type='number'
+                min={0}
+                defaultValue={currValue}
+                onChange={e => setCurrValue(parseInt(e.target.value))}
                 maxLength={10}
                 className='bg-transparent focus:outline-none w-full font-mono pl-2'
             />
@@ -43,7 +45,7 @@ export default function StringInput({ text, saveToServer, saveToRedux }: StringI
                 onClick={trySave}
                 className={
                     'bg-green-700 rounded-md text-md font-bold px-4 py-1 ' +
-                    (currText === text ? 'cursor-not-allowed brightness-50 ' : 'hover:bg-green-500 ') +
+                    (currValue === value ? 'cursor-not-allowed brightness-50 ' : 'hover:bg-green-500 ') +
                     (saveStatus === 'saving' ? 'brightness-50 hover:bg-green-700 ' : '')
                 }
             >

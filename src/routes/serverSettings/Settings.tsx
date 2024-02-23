@@ -1,7 +1,8 @@
 import { RouteObject, Outlet, useLoaderData, LoaderFunction, useNavigate } from 'react-router-dom';
 import { ExtractRouteParams } from '@/util/typeMagic';
-import { routerData as generalRouterData } from './general/General';
 import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
+import { routerData as generalRouterData } from './general/General';
+import { routerData as punishmentRouterData } from './punishments/Punishments';
 
 import { Navmenu } from '@/components/Navmenu';
 import { Header } from '@/components/Header';
@@ -19,7 +20,8 @@ export const routerData: RouteObject = {
             element: <Index />,
             loader: loader as unknown as LoaderFunction
         },
-        generalRouterData
+        generalRouterData,
+        punishmentRouterData
     ]
 }
 

@@ -19,7 +19,30 @@ const testInitialState = {
         compact_responses: false,
         mod_stats: {
             status: true
-        }
+        },
+        warn_punishments: [
+            {
+                action: 'act',
+                duration: 1000,
+                duration_raw: '1s',
+                warningsCount: 3,
+                warningSeverity: 'low'
+            },
+            {
+                action: 'hello',
+                duration: 500,
+                duration_raw: '1s',
+                warningsCount: 5,
+                warningSeverity: 'high'
+            },
+            {
+                action: 'LOL',
+                duration: 500,
+                duration_raw: '1s',
+                warningsCount: 5,
+                warningSeverity: 'high'
+            },
+        ]
     }
 } as GuildState;
 
@@ -47,8 +70,11 @@ export const guildSlice = createSlice({
         removePunishment: (state, action: PayloadAction<GR.RemovePunishmentPayload>) => {
             if(!state.data) return;
             state.data.warn_punishments = state.data.warn_punishments.filter(p => {
-                // @ts-expect-error This is totally OK
-                return Object.keys(p).some(k => p[k] !== action.payload[k])
+                return p.action !== action.payload.action ||
+                    p.duration !== action.payload.duration ||
+                    p.duration_raw !== action.payload.duration_raw ||
+                    p.warningSeverity !== action.payload.warningSeverity ||
+                    p.warningsCount !== action.payload.warningsCount;
             });
         },
         addPermit: (state, action: PayloadAction<GR.AddPermitPayload>) => {
