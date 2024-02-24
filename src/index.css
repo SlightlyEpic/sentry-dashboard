@@ -55,11 +55,11 @@
 }
 
 @layer utilities {
-    .animation-delay-166 {
+    .animation-delay-1\/6 {
         animation-delay: 166ms;
     }
 
-    .animation-delay-333 {
+    .animation-delay-2\/6 {
         animation-delay: 333ms;
     }
 }

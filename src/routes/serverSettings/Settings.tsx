@@ -10,6 +10,7 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import SettingCard from '@/components/SettingCard';
 import { useAppSelector } from '@/redux/hooks';
+import { useEffect } from 'react';
 
 export const routerData: RouteObject = {
     path: 'settings/:serverId/',
@@ -99,12 +100,12 @@ export default function Settings() {
 
     const user = useAppSelector(state => state.user);
     
-    // useEffect(() => {
-    //     console.log('user:', user);
-    //     if(!user.isAuthenticated) navigate('/settings', { replace: true });
-    // }, [user, navigate]);
+    useEffect(() => {
+        console.log('user:', user);
+        if(!user.isAuthenticated) navigate('/settings', { replace: true });
+    }, [user, navigate]);
 
-    // if(!user.isAuthenticated) return <></>
+    if(!user.isAuthenticated) return <></>
 
     return <>
         <img src='/waves/blob-blurple.svg' className='absolute w-full h-full object-cover -z-10' />

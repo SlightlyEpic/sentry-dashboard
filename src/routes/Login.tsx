@@ -40,8 +40,8 @@ export default function Login() {
                 <div className='text-3xl text-white'>Logging you in...</div>
                 <div className='flex gap-6'>
                     <MinusCircleIcon className='animate-spin w-12 h-12 stroke-white' />
-                    <MinusCircleIcon className='animate-spin animation-delay-166 w-12 h-12 stroke-white' />
-                    <MinusCircleIcon className='animate-spin animation-delay-333 w-12 h-12 stroke-white' />
+                    <MinusCircleIcon className='animate-spin animation-delay-1/6 w-12 h-12 stroke-white' />
+                    <MinusCircleIcon className='animate-spin animation-delay-2/6 w-12 h-12 stroke-white' />
                 </div>
             </div>
         </div>

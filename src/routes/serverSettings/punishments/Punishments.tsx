@@ -31,8 +31,8 @@ export default function PunishmentSettings() {
             action: 'mute',
             duration: 24 * 60 * 1000,
             duration_raw: '24h',
-            warningsCount: 100,
-            warningSeverity: 'low'
+            warnings_count: 100,
+            warning_severity: 'low'
         }));
     }
 

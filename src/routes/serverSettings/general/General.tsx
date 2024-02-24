@@ -4,6 +4,7 @@ import SwitchButton from '@/components/SwitchButton';
 import StaticSwitch from '@/components/StaticSwitch';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setCompactRespone, setModStatsStatus, setPrefix } from '@/redux/guildSlice';
+import * as api from '@/apiInterface/guildSettings';
 
 export const routerData: RouteObject = {
     path: 'general/',
@@ -15,7 +16,8 @@ export default function GeneralSettings() {
     const guild = useAppSelector(state => state.guild);
 
     // const savePrefixToServer = () => new Promise<string>((rs, rj) => setTimeout(v => Math.random() > 0.5 ? rs(v) : rj(v), 2000, 'Success'));
-    const savePrefixToServer = () => new Promise<string>((_, r) => setTimeout(r, 2000, 'Success'));
+    // const savePrefixToServer = () => new Promise<string>((_, r) => setTimeout(r, 2000, 'Success'));
+    const savePrefixToServer = (value: string) => api.setPrefix(guild.guildId!, { prefix: value });
     const savePrefixToRedux = (value: string) => dispatch(setPrefix({ prefix: value }));
     
     const saveMStatToServer = () => new Promise<string>((_, r) => setTimeout(r, 2000, 'Success'));

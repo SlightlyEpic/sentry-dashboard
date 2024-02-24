@@ -7,54 +7,55 @@ type GuildState = {
     data: GuildSettings | null
 }
 
-// const initialState = {
-//     guildId: null,
-//     data: null
-// } as GuildState;
-
-const testInitialState = {
+const initialState = {
     guildId: null,
-    data: {
-        prefix: 'test',
-        compact_responses: false,
-        mod_stats: {
-            status: true
-        },
-        warn_punishments: [
-            {
-                action: 'act',
-                duration: 1000,
-                duration_raw: '1s',
-                warningsCount: 3,
-                warningSeverity: 'low'
-            },
-            {
-                action: 'hello',
-                duration: 500,
-                duration_raw: '1s',
-                warningsCount: 5,
-                warningSeverity: 'high'
-            },
-            {
-                action: 'LOL',
-                duration: 500,
-                duration_raw: '1s',
-                warningsCount: 5,
-                warningSeverity: 'high'
-            },
-        ],
-        adwarning_settings: {
-            channel: '1234567890',
-            message_template: null,
-            send_dm: false,
-            status: true
-        }
-    }
+    data: null
 } as GuildState;
+
+// const testInitialState = {
+//     guildId: null,
+//     data: {
+//         prefix: 'test',
+//         compact_responses: false,
+//         mod_stats: {
+//             status: true
+//         },
+//         warn_punishments: [
+//             {
+//                 action: 'act',
+//                 duration: 1000,
+//                 duration_raw: '1s',
+//                 warnings_count: 3,
+//                 warning_severity: 'low'
+//             },
+//             {
+//                 action: 'hello',
+//                 duration: 500,
+//                 duration_raw: '1s',
+//                 warnings_count: 5,
+//                 warning_severity: 'high'
+//             },
+//             {
+//                 action: 'LOL',
+//                 duration: 500,
+//                 duration_raw: '1s',
+//                 warnings_count: 5,
+//                 warning_severity: 'high'
+//             },
+//         ],
+//         adwarning_settings: {
+//             channel: '1234567890',
+//             message_template: null,
+//             send_dm: false,
+//             status: true
+//         }
+//     }
+// } as GuildState;
 
 export const guildSlice = createSlice({
     name: 'guildSettings',
-    initialState: testInitialState,
+    // initialState: testInitialState,
+    initialState,
     reducers: {
         setGuildId: (state, action: PayloadAction<string>) => {
             if(state.guildId !== action.payload) {
@@ -79,8 +80,8 @@ export const guildSlice = createSlice({
                 return p.action !== action.payload.action ||
                     p.duration !== action.payload.duration ||
                     p.duration_raw !== action.payload.duration_raw ||
-                    p.warningSeverity !== action.payload.warningSeverity ||
-                    p.warningsCount !== action.payload.warningsCount;
+                    p.warning_severity !== action.payload.warning_severity ||
+                    p.warnings_count !== action.payload.warnings_count;
             });
         },
         addPermit: (state, action: PayloadAction<GR.AddPermitPayload>) => {
@@ -143,6 +144,7 @@ export const guildSlice = createSlice({
 });
 
 export const {
+    setGuildId,
     setAllSettings,
     setPrefix,
     addPunishment,

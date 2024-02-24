@@ -51,9 +51,9 @@ function PunishStrInput({ defaultValue, onChange }: PunishNumStringProps) {
 
 export default function PunishmentInput({ punishment, saveToServer, saveToRedux, deleteFromServer, deleteFromRedux }: PunishmentProps) {
     const [currDuration, setCurrDuration] = useState(punishment.duration);
-    const [currWarnCount, setCurrWarnCount] = useState(punishment.warningsCount);
+    const [currWarnCount, setCurrWarnCount] = useState(punishment.warnings_count);
     const [currAction, setCurrAction] = useState(punishment.action);
-    const [currSeverity, setCurrSeverity] = useState(punishment.warningSeverity);
+    const [currSeverity, setCurrSeverity] = useState(punishment.warning_severity);
 
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
     const [hasChanged, setHasChanged] = useState(false);
@@ -61,15 +61,15 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
     useEffect(() => {
         if(
             currDuration !== punishment.duration ||
-            currWarnCount !== punishment.warningsCount ||
+            currWarnCount !== punishment.warnings_count ||
             currAction !== punishment.action ||
-            currSeverity !== punishment.warningSeverity
+            currSeverity !== punishment.warning_severity
         ) {
             setHasChanged(true);
         } else {
             setHasChanged(false);
         }
-    }, [currDuration, currWarnCount, currAction, currSeverity, punishment.duration, punishment.warningsCount, punishment.action, punishment.warningSeverity]);
+    }, [currDuration, currWarnCount, currAction, currSeverity, punishment.duration, punishment.warnings_count, punishment.action, punishment.warning_severity]);
 
     const trySave = async () => {
         if(saveStatus === 'saving') return;
@@ -77,9 +77,9 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
         
         const currPunishment: Punishment = {
             duration: currDuration,
-            warningsCount: currWarnCount,
+            warnings_count: currWarnCount,
             action: currAction,
-            warningSeverity: currSeverity,
+            warning_severity: currSeverity,
             duration_raw: punishment.duration_raw
         };
 
@@ -101,9 +101,9 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
         
         const p: Punishment = {
             duration: currDuration,
-            warningsCount: currWarnCount,
+            warnings_count: currWarnCount,
             action: currAction,
-            warningSeverity: currSeverity,
+            warning_severity: currSeverity,
             duration_raw: punishment.duration_raw
         };
 
@@ -127,7 +127,7 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
             </div>
             <div className='w-full flex gap-4 justify-stretch'>
                 <PunishNumInput onChange={setCurrDuration} defaultValue={punishment.duration}></PunishNumInput>
-                <PunishNumInput onChange={setCurrWarnCount} defaultValue={punishment.warningsCount}></PunishNumInput>
+                <PunishNumInput onChange={setCurrWarnCount} defaultValue={punishment.warnings_count}></PunishNumInput>
             </div>
             <div className='w-full flex gap-4 justify-stretch'>
                 <div className='font-bold w-1/2'>Action</div>
@@ -135,7 +135,7 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
             </div>
             <div className='w-full flex gap-4 justify-stretch'>
                 <PunishStrInput onChange={setCurrAction} defaultValue={punishment.action}></PunishStrInput>
-                <PunishStrInput onChange={setCurrSeverity} defaultValue={punishment.warningSeverity}></PunishStrInput>
+                <PunishStrInput onChange={setCurrSeverity} defaultValue={punishment.warning_severity}></PunishStrInput>
             </div>
 
             <div className='w-full h-8 flex gap-4 justify-end'>

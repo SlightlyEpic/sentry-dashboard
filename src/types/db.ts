@@ -42,10 +42,10 @@ export type Permit = {
 }
 
 export type Punishment = {
-    warningsCount: number
+    warnings_count: number
     duration_raw: string
     duration: number
-    warningSeverity: string
+    warning_severity: string
     action: string
 }
 
