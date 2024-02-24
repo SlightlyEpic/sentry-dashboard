@@ -22,7 +22,7 @@ export default function ServerSelector() {
         try {
             const guildSettings = await api.getAllSettings(guildId.current);
             dispatch(setAllSettings(guildSettings));
-            navigate(`/settings/${guildId}/general`);
+            navigate(`/settings/${guildId.current}/general`);
         } catch(err) {
             alert(`Loading failed: ${err}`);
         }

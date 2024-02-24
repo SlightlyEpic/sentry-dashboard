@@ -31,7 +31,10 @@ function postApiRequest(guildId: string, endpoint: string, payload: GR.AnyPayloa
     return new Promise<string>((resolve, reject) => {
         fetch(`/api/guilds/${guildId}/${endpoint}`, {
             method: 'POST',
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
         .then(res => {
             if(!res.ok) reject('Request failed.');
@@ -76,6 +79,14 @@ export function getTemplates(guildId: string) {
 
 export function setPrefix(guildId: string, payload: GR.SetPrefixPayload) {
     return postApiRequest(guildId, 'prefix', payload);
+}
+
+export function setModStatsStatus(guildId: string, payload: GR.SetModStatsStatusPayload) {
+    return postApiRequest(guildId, 'modstats/status', payload);
+}
+
+export function setCompactResponse(guildId: string, payload: GR.SetCompactResponsePayload) {
+    return postApiRequest(guildId, 'compactResponse', payload);
 }
 
 export function addPunishment(guildId: string, payload: GR.AddPunishmentPayload) {

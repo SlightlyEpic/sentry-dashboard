@@ -5,6 +5,7 @@ import PunishmentInput from '@/components/PunishmentInput';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addPunishment, removePunishment } from '@/redux/guildSlice';
 import type { Punishment } from '@/types/db';
+import * as api from '@/apiInterface/guildSettings';
 
 export const routerData: RouteObject = {
     path: 'punishments/',
@@ -15,16 +16,24 @@ export default function PunishmentSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
+    const savePunishmentToServer = async (oldP: Punishment, newP: Punishment) => {
+        await api.removePunishment(guild.guildId!, oldP);
+        await api.addPunishment(guild.guildId!, newP);
+        return 'Success';
+    }
+
     const savePunishmentToRedux = (oldP: Punishment, newP: Punishment) => {
         dispatch(removePunishment(oldP));
         dispatch(addPunishment(newP));
     };
 
+    const deletePunishmentFromServer = async (p: Punishment) => api.removePunishment(guild.guildId!, p);
+
     const deletePunishmentFromRedux = (p: Punishment) => {
         dispatch(removePunishment(p));
     }
 
-    const wait2S = () => new Promise<string>(r => setTimeout(r, 2000, 'Success'));
+    // const wait2S = () => new Promise<string>(r => setTimeout(r, 2000, 'Success'));
 
     const makeNewPunishment = () => {
         dispatch(addPunishment({
@@ -46,9 +55,9 @@ export default function PunishmentSettings() {
                     guild.data && guild.data.warn_punishments.map(p => <PunishmentInput
                         punishment={p}
                         saveToRedux={savePunishmentToRedux}
-                        saveToServer={wait2S}
+                        saveToServer={savePunishmentToServer}
                         deleteFromRedux={deletePunishmentFromRedux}
-                        deleteFromServer={wait2S}
+                        deleteFromServer={deletePunishmentFromServer}
                         key={MD5(p)}
                     />)
                 }

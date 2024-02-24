@@ -3,6 +3,7 @@ import StringInput from '@/components/StringInput';
 import SwitchButton from '@/components/SwitchButton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setAdWarnChannel, setAdWarnDmStatus, setAdWarnStatus } from '@/redux/guildSlice';
+import * as api from '@/apiInterface/guildSettings';
 
 export const routerData: RouteObject = {
     path: 'adwarn/',
@@ -13,14 +14,13 @@ export default function AdWarnSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    // const savePrefixToServer = () => new Promise<string>((rs, rj) => setTimeout(v => Math.random() > 0.5 ? rs(v) : rj(v), 2000, 'Success'));
-    const saveStatusToServer = () => new Promise<string>((_, r) => setTimeout(r, 2000, 'Success'));
+    const saveStatusToServer = (value: boolean) => api.setAdWarnStatus(guild.guildId!, { status: value });
     const saveStatusToRedux = (value: boolean) => dispatch(setAdWarnStatus({ status: value }));
     
-    const saveSendDMToServer = () => new Promise<string>((_, r) => setTimeout(r, 2000, 'Success'));
+    const saveSendDMToServer = (value: boolean) => api.setAdWarnDmStatus(guild.guildId!, { status: value });
     const saveSendDMToRedux = (value: boolean) => dispatch(setAdWarnDmStatus({ status: value }));
     
-    const saveChannelToServer = () => new Promise<string>(r => setTimeout(r, 2000, 'Success'));
+    const saveChannelToServer = (value: string) => api.setAdWarnChannel(guild.guildId!, { channel: value });
     const saveChannelToRedux = (value: string) => dispatch(setAdWarnChannel({ channel: value }));
 
     return (

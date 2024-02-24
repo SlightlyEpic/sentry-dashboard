@@ -15,15 +15,13 @@ export default function GeneralSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    // const savePrefixToServer = () => new Promise<string>((rs, rj) => setTimeout(v => Math.random() > 0.5 ? rs(v) : rj(v), 2000, 'Success'));
-    // const savePrefixToServer = () => new Promise<string>((_, r) => setTimeout(r, 2000, 'Success'));
     const savePrefixToServer = (value: string) => api.setPrefix(guild.guildId!, { prefix: value });
     const savePrefixToRedux = (value: string) => dispatch(setPrefix({ prefix: value }));
     
-    const saveMStatToServer = () => new Promise<string>((_, r) => setTimeout(r, 2000, 'Success'));
+    const saveMStatToServer = (value: boolean) => api.setModStatsStatus(guild.guildId!, { status: value });
     const saveMStatToRedux = (value: boolean) => dispatch(setModStatsStatus({ status: value }));
     
-    const saveCompResToServer = () => new Promise<string>(r => setTimeout(r, 2000, 'Success'));
+    const saveCompResToServer = (value: boolean) => api.setCompactResponse(guild.guildId!, { status: value });
     const saveCompRestToRedux = (value: boolean) => dispatch(setCompactRespone({ status: value }));
 
     return (
