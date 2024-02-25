@@ -4,6 +4,7 @@ import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIco
 import { routerData as generalRouterData } from './general/General';
 import { routerData as punishmentRouterData } from './punishments/Punishments';
 import { routerData as adwarnRouterData } from './adwarn/AdWarn';
+import { routerData as permitRouterData } from './permits/Permits';
 
 import { Navmenu } from '@/components/Navmenu';
 import { Header } from '@/components/Header';
@@ -24,7 +25,8 @@ export const routerData: RouteObject = {
         },
         generalRouterData,
         punishmentRouterData,
-        adwarnRouterData
+        adwarnRouterData,
+        permitRouterData
     ]
 }
 
