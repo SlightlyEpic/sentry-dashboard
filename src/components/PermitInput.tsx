@@ -1,24 +1,27 @@
 import { PermissionFlags, Permit } from '@/types/db'
 import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import { ChevronDoubleDownIcon } from '@heroicons/react/24/outline';
+import { ChevronDoubleDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useReducer, useState } from 'react';
+import SaveStatus, { SaveStatusProps } from './SaveStatus';
 
 export type PermitInputProps = {
     permit: Permit;
+    saveToServer: (permit: Permit) => Promise<string>
+    saveToRedux: (permit: Permit) => unknown
 }
 
-const permissionFlags: PermissionFlags[] = [
-    'MANAGE_CASES',
-    'MANAGE_LOCKDOWN',
-    'MANAGE_APPEALS',
-    'MANAGE_SLOWMODE',
-    'MANAGE_MODMAIL_THREADS',
-    'MANAGE_APPLICATION_RESPONSES',
-    'WARN_MEMBERS',
-    'KICK_MEMBERS',
-    'BAN_MEMBERS',
-    'MUTE_MEMBERS',
+const permissionFlags: [PermissionFlags, string][] = [
+    ['MANAGE_CASES', 'Manage Cases'],
+    ['MANAGE_LOCKDOWN', 'Manage Lockdown'],
+    ['MANAGE_APPEALS', 'Manage Appeals'],
+    ['MANAGE_SLOWMODE', 'Manage Slowmode'],
+    ['MANAGE_MODMAIL_THREADS', 'Manage ModMail Threads'],
+    ['MANAGE_APPLICATION_RESPONSES', 'Manage App Responses'],
+    ['WARN_MEMBERS', 'Warn Members'],
+    ['KICK_MEMBERS', 'Kick Members'],
+    ['BAN_MEMBERS', 'Ban Members'],
+    ['MUTE_MEMBERS', 'Mute Members'],
 ];
 
 type PermitReducerAction = {
@@ -74,17 +77,28 @@ const permitReducer = (state: Permit & { changed: boolean }, action: PermitReduc
     return newState;
 }
 
-export default function PermitInput({ permit }: PermitInputProps) {
+export default function PermitInput({ permit, saveToServer, saveToRedux }: PermitInputProps) {
     const [currPermit, dispatch] = useReducer(permitReducer, { ...permit, changed: false });
     const [permExpanded, setPermExpanded] = useState(false);
     const [rolesExpanded, setRolesExpanded] = useState(false);
+    const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
+    const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
 
-    // So from what I get mongo will conver Int64 to this form
-    type idkWhereThisCameFrom = {
-        low: number
-        high: number
-        unsigned: boolean
-    }
+    const trySave = async () => {
+        if(saveStatus === 'saving') return;
+        clearTimeout(timeoutId);
+        
+        try {
+            setSaveStatus('saving');
+            await saveToServer(currPermit);
+            saveToRedux(currPermit);
+            setSaveStatus('success');
+            setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
+        } catch(err) {
+            setSaveStatus('error');
+            setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
+        }
+    };
 
     return (
         <div className='flex flex-col text-white border border-bggrey-ll p-4 rounded-md bg-bgdark flex-grow'>
@@ -103,15 +117,15 @@ export default function PermitInput({ permit }: PermitInputProps) {
                 <ChevronDoubleDownIcon className={'w-6 h-6 transition-transform duration-300 ' + (permExpanded ? 'rotate-180' : '')}/>
             </div>
             <div className={
-                'grid grid-cols-2 h-full rounded-md overflow-clip transition-all duration-300 ease-linear ' + 
+                'grid grid-cols-1 lg:grid-cols-2 h-full rounded-md overflow-clip transition-all duration-300 ease-out ' + 
                 (currPermit.locked ? 'cursor-not-allowed ' : '') +
-                (permExpanded ? 'max-h-96 ' : 'max-h-0 ')
+                (permExpanded ? 'max-h-[25rem] lg:max-h-[12.5rem] ' : 'max-h-0 ')
             }>
                 {
-                    permissionFlags.map(flag => {
+                    permissionFlags.map(([flag, flagStr]) => {
                         return <div
                             className={
-                                'font-mono flex gap-2 transition-colors duration-300 p-2 rounded-md select-none ' +
+                                'h-10 font-mono flex gap-2 transition-colors duration-300 p-2 rounded-md select-none ' +
                                 (currPermit.locked ? 'cursor-not-allowed ' : 'cursor-pointer hover:bg-blurple ')
                             }
                             onClick={() => !currPermit.locked && dispatch({ type: 'togglePermission', payload: { permission: flag } })}
@@ -119,7 +133,7 @@ export default function PermitInput({ permit }: PermitInputProps) {
                             key={flag}
                         >
                             <CheckCircleIcon className={'w-6 h-6 ' + (currPermit.permissions.includes(flag) ? '' : 'invisible ')} />
-                            <div>{flag}</div>
+                            <div>{flagStr}</div>
                         </div>
                     })
                 }
@@ -131,20 +145,51 @@ export default function PermitInput({ permit }: PermitInputProps) {
                 <ChevronDoubleDownIcon className={'w-6 h-6 transition-transform duration-300 ' + (rolesExpanded ? 'rotate-180' : '')}/>
             </div>
             <div className={
-                'mt-2 flex flex-col font-mono h-full rounded-md overflow-clip transition-all duration-0 ease-linear ' + 
-                (currPermit.locked ? 'cursor-not-allowed ' : '') +
-                (rolesExpanded ? 'max-h-96 ' : 'max-h-0 ')
-            }>
+                'mt-2 flex flex-col font-mono h-full rounded-md overflow-clip transition-all duration-150 ease-linear ' + 
+                (currPermit.locked ? 'cursor-not-allowed ' : '') 
+                // (rolesExpanded ? 'max-h-[25rem] lg:max-h-[12.5rem] ' : 'max-h-0 ')
+                }
+                style={{
+                    height: rolesExpanded ? `${(currPermit.roles.length * 2.5 + 2.5).toFixed(2)}rem` : '0'
+                }}
+            >
                 {
-                    // currPermit.roles.map(role => <div key={role}>{role}</div>)
-
                     currPermit.roles.map(role => {
-                        if(typeof role === 'number') return <div key={`${role}`}>{role}</div>
-                        
-                        const role2 = role as unknown as idkWhereThisCameFrom;
-                        return <div key={`${role2.high}${role2.low}`}>{`${role2.high}${role2.low}`}</div>
+                        return <div 
+                            className='h-10 flex items-center'
+                            key={`${role}`}
+                        >
+                                {role}
+                            </div>
                     })
                 }
+
+                <div className='flex justify-end'>
+                    <button
+                        type="button"
+                        onClick={() => {}}
+                        className='flex items-center w-full sm:w-max justify-center h-10 gap-1 bg-green-700 rounded-md text-md font-bold px-4 py-1 hover:bg-green-500 '
+                    >
+                        <PlusCircleIcon className='w-6 h-6 translate-y-[0.07rem]' />
+                        <div className='text-xl text-center'>Add Role</div>
+                    </button>
+                </div>
+            </div>
+
+            
+            <div className='flex items-center justify-end w-full h-8 gap-2'>
+                <SaveStatus status={saveStatus} />
+                <button
+                    type="button"
+                    onClick={trySave}
+                    className={
+                        'bg-green-700 rounded-md text-md font-bold px-4 py-1 ' +
+                        (!currPermit.changed ? 'cursor-not-allowed brightness-50 ' : 'hover:bg-green-500 ') +
+                        (saveStatus === 'saving' ? 'brightness-50 hover:bg-green-700 ' : '')
+                    }
+                >
+                    Save
+                </button>
             </div>
         </div>
     )
