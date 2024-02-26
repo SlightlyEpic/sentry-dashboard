@@ -93,6 +93,12 @@ export type Menu = {
 
 export type Report = unknown;
 
+export type CompactRole = {
+    id: string
+    name: string
+    color: number
+}
+
 export type GuildSettings = {
     adwarning_settings: AdWarn
     mod_stats: {
@@ -115,5 +121,8 @@ export type GuildSettings = {
         status: boolean
         channel: string | null
         data: Report[]
+    }
+    roles: {
+        [key: string]: CompactRole
     }
 };

@@ -1,9 +1,10 @@
-import { PermissionFlags, Permit } from '@/types/db'
-import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/24/outline';
+import { CompactRole, PermissionFlags, Permit } from '@/types/db'
+import { LockClosedIcon, LockOpenIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ChevronDoubleDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
 import { useReducer, useState } from 'react';
 import SaveStatus, { SaveStatusProps } from './SaveStatus';
+import { useAppSelector } from '@/redux/hooks';
 
 export type PermitInputProps = {
     permit: Permit;
@@ -54,11 +55,11 @@ const permitReducer = (state: Permit & { changed: boolean }, action: PermitReduc
             break;
         case 'removePermission':
             if(!state.permissions.includes(action.payload.permission)) return state;
-            newState.permissions = newState.permissions.filter(p => p != action.payload.permission);
+            newState.permissions = newState.permissions.filter(p => p !== action.payload.permission);
             newState.changed = true;
             break;
         case 'togglePermission':
-            if(state.permissions.includes(action.payload.permission)) newState.permissions = newState.permissions.filter(p => p != action.payload.permission);
+            if(state.permissions.includes(action.payload.permission)) newState.permissions = newState.permissions.filter(p => p !== action.payload.permission);
             else newState.permissions.push(action.payload.permission);
             newState.changed = true;
             break;
@@ -69,7 +70,7 @@ const permitReducer = (state: Permit & { changed: boolean }, action: PermitReduc
             break;
         case 'removeRole':
             if(!state.roles.includes(action.payload.roleId)) return state;
-            newState.roles = newState.roles.filter(p => p != action.payload.roleId);
+            newState.roles = newState.roles.filter(p => p !== action.payload.roleId);
             newState.changed = true;
             break;
     }
@@ -78,6 +79,7 @@ const permitReducer = (state: Permit & { changed: boolean }, action: PermitReduc
 }
 
 export default function PermitInput({ permit, saveToServer, saveToRedux }: PermitInputProps) {
+    const guild = useAppSelector(state => state.guild);
     const [currPermit, dispatch] = useReducer(permitReducer, { ...permit, changed: false });
     const [permExpanded, setPermExpanded] = useState(false);
     const [rolesExpanded, setRolesExpanded] = useState(false);
@@ -100,6 +102,8 @@ export default function PermitInput({ permit, saveToServer, saveToRedux }: Permi
         }
     };
 
+    // const roleKeys = Object.keys(guild.data!.roles);
+
     return (
         <div className='flex flex-col text-white border border-bggrey-ll p-4 rounded-md bg-bgdark flex-grow'>
             <div className='mb-2 flex gap-2 justify-start items-center bg-transparent w-full font-mono'>
@@ -112,7 +116,7 @@ export default function PermitInput({ permit, saveToServer, saveToRedux }: Permi
             </div>
 
             <div className='mt-2 mb-2 border-t border-bggrey-ll' />
-            <div className={'mt-2 mb-2 text-2xl font-bold flex justify-between cursor-pointer '} onClick={() => setPermExpanded(s => !s)}>
+            <div className={'mt-2 mb-2 text-2xl font-bold flex justify-between items-center cursor-pointer '} onClick={() => setPermExpanded(s => !s)}>
                 <div>Permissions</div>
                 <ChevronDoubleDownIcon className={'w-6 h-6 transition-transform duration-300 ' + (permExpanded ? 'rotate-180' : '')}/>
             </div>
@@ -140,7 +144,7 @@ export default function PermitInput({ permit, saveToServer, saveToRedux }: Permi
             </div>
 
             <div className='mt-2 mb-2 border-t border-bggrey-ll' />
-            <div className='mt-2 text-2xl font-bold flex justify-between cursor-pointer' onClick={() => setRolesExpanded(s => !s)}>
+            <div className='mt-2 text-2xl font-bold flex justify-between items-center cursor-pointer' onClick={() => setRolesExpanded(s => !s)}>
                 <div>Roles</div>
                 <ChevronDoubleDownIcon className={'w-6 h-6 transition-transform duration-300 ' + (rolesExpanded ? 'rotate-180' : '')}/>
             </div>
@@ -150,17 +154,30 @@ export default function PermitInput({ permit, saveToServer, saveToRedux }: Permi
                 // (rolesExpanded ? 'max-h-[25rem] lg:max-h-[12.5rem] ' : 'max-h-0 ')
                 }
                 style={{
-                    height: rolesExpanded ? `${(currPermit.roles.length * 2.5 + 2.5).toFixed(2)}rem` : '0'
+                    height: rolesExpanded ? `${(currPermit.roles.length * 3 + 2.5).toFixed(2)}rem` : '0'
                 }}
+                // style={{
+                //     height: rolesExpanded ? `${(roleKeys.length * 2.5 + 2.5).toFixed(2)}rem` : '0'
+                // }}
             >
                 {
                     currPermit.roles.map(role => {
-                        return <div 
-                            className='h-10 flex items-center'
-                            key={`${role}`}
-                        >
-                                {role}
+                        const cRole: CompactRole | undefined = guild.data!.roles[role];
+                        return <div className='flex' key={role}>
+                            <div className='peer flex items-center justify-center p-2 transition-all duration-300 bg-transparent hover:bg-rose-500 cursor-pointer rounded-l-md'>
+                                <TrashIcon
+                                    className='w-6 h-6' 
+                                    onClick={() => dispatch({ type: 'removeRole', payload: { roleId: role } })} 
+                                />
                             </div>
+                            <div 
+                                className='h-10 w-full flex items-center peer-hover:bg-blurple hover:bg-blurple rounded-r-md transition-all duration-300 p-2 '
+                                style={{ color: cRole ? `#${cRole.color.toString(16)}` : '0' }}
+                            >
+                                <div className='w-1/2'>{cRole?.name ?? 'Unknown role'}</div>
+                                <div>{role}</div>
+                            </div>
+                        </div>
                     })
                 }
 
@@ -176,8 +193,8 @@ export default function PermitInput({ permit, saveToServer, saveToRedux }: Permi
                 </div>
             </div>
 
-            
-            <div className='flex items-center justify-end w-full h-8 gap-2'>
+            <div className='mt-2 mb-2 border-t border-bggrey-ll' />
+            <div className='mt-2 flex items-center justify-end w-full h-8 gap-2'>
                 <SaveStatus status={saveStatus} />
                 <button
                     type="button"
