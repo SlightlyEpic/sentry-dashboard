@@ -47,7 +47,7 @@ export default function PunishmentSettings() {
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">
-            <div className='self-center text-4xl font-bold bg-blurple p-2 border border-white select-none rounded-md mb-4'>
+            <div className='self-center text-2xl lg:text-4xl font-bold bg-blurple p-2 border border-white select-none rounded-md mb-4 text-center'>
                 Punishment Settings
             </div>
             <div className='w-full flex flex-col gap-4'>

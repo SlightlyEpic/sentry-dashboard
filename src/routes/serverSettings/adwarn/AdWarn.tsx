@@ -25,7 +25,7 @@ export default function AdWarnSettings() {
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">
-            <div className='self-center text-4xl font-bold bg-blurple p-2 border border-white select-none rounded-md mb-4'>
+            <div className='self-center text-2xl lg:text-4xl font-bold bg-blurple p-2 border border-white select-none rounded-md mb-4 text-center'>
                 Ad Warning Settings
             </div>
             <div className='flex flex-col gap-4'>
