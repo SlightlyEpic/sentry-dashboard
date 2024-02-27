@@ -5,6 +5,7 @@ import { routerData as generalRouterData } from './general/General';
 import { routerData as punishmentRouterData } from './punishments/Punishments';
 import { routerData as adwarnRouterData } from './adwarn/AdWarn';
 import { routerData as permitRouterData } from './permits/Permits';
+import { routerData as reportsRouterData } from './reports/Reports';
 
 import { Navmenu } from '@/components/Navmenu';
 import { Header } from '@/components/Header';
@@ -26,7 +27,8 @@ export const routerData: RouteObject = {
         generalRouterData,
         punishmentRouterData,
         adwarnRouterData,
-        permitRouterData
+        permitRouterData,
+        reportsRouterData
     ]
 }
 
