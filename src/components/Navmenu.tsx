@@ -95,7 +95,7 @@ export function Navmenu({ serverId }: NavmenuProps) {
                 <NavmenuItem pathname={location.pathname} name='Reports' serverId={serverId} to='reports'>
                     <NewspaperIcon className='w-6 h-6'></NewspaperIcon>
                 </NavmenuItem>
-                <NavmenuItem pathname={location.pathname} name='Message Templates' serverId={serverId} to='messages'>
+                <NavmenuItem pathname={location.pathname} name='Message Templates' serverId={serverId} to='templates'>
                     <ChatBubbleBottomCenterIcon className='w-6 h-6'></ChatBubbleBottomCenterIcon>
                 </NavmenuItem>
             </div>

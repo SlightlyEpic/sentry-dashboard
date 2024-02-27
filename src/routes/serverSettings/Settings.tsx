@@ -6,6 +6,7 @@ import { routerData as punishmentRouterData } from './punishments/Punishments';
 import { routerData as adwarnRouterData } from './adwarn/AdWarn';
 import { routerData as permitRouterData } from './permits/Permits';
 import { routerData as reportsRouterData } from './reports/Reports';
+import { routerData as templatesRouterData } from './templates/Templates';
 
 import { Navmenu } from '@/components/Navmenu';
 import { Header } from '@/components/Header';
@@ -28,7 +29,8 @@ export const routerData: RouteObject = {
         punishmentRouterData,
         adwarnRouterData,
         permitRouterData,
-        reportsRouterData
+        reportsRouterData,
+        templatesRouterData
     ]
 }
 
@@ -88,7 +90,7 @@ function Index() {
             </SettingCard>
             <SettingCard
                 settingName='Message Templates'
-                to={`/settings/${loaderData.serverId}/messages`}
+                to={`/settings/${loaderData.serverId}/templates`}
                 icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
                 buttonText='Configure Reports'
             >
