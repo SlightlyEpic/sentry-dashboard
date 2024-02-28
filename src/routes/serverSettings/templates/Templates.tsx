@@ -1,7 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import * as api from '@/apiInterface/guildSettings';
-import { setReportsChannel, setReportsStatus } from '@/redux/guildSlice';
 import { MessageTemplate } from '@/components/MessageTemplate';
 
 export const routerData: RouteObject = {

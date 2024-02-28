@@ -5,6 +5,7 @@ import * as api from '@/apiInterface/guildSettings';
 import PermitInput from '@/components/PermitInput';
 import { Permit } from '@/types/db';
 import { setPermitPermissions, setPermitRoles } from '@/redux/guildSlice';
+import { useCallback } from 'react';
 
 export const routerData: RouteObject = {
     path: 'permits/',
@@ -15,19 +16,18 @@ export default function PermitsSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    // TODO: Somethings wrong with these routes but i need to sleep
-    const saveToServer = async (permit: Permit) => {
+    const saveToServer = useCallback(async (permit: Permit) => {
         await Promise.all([
             api.setPermitPermissions(guild.guildId!, { permitName: permit.name, permissions: permit.permissions }),
             api.setPermitRoles(guild.guildId!, { permitName: permit.name, roles: permit.roles })
         ]);
         return 'Success';
-    }
+    }, [guild]);
 
-    const saveToRedux = (permit: Permit) => {
+    const saveToRedux = useCallback((permit: Permit) => {
         dispatch(setPermitPermissions({ permitName: permit.name, permissions: permit.permissions }));
         dispatch(setPermitRoles({ permitName: permit.name, roles: permit.roles }));
-    }
+    }, [dispatch]);
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { addPunishment, removePunishment } from '@/redux/guildSlice';
 import type { Punishment } from '@/types/db';
 import * as api from '@/apiInterface/guildSettings';
+import { useCallback } from 'react';
 
 export const routerData: RouteObject = {
     path: 'punishments/',
@@ -16,26 +17,26 @@ export default function PunishmentSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    const savePunishmentToServer = async (oldP: Punishment, newP: Punishment) => {
+    const savePunishmentToServer = useCallback(async (oldP: Punishment, newP: Punishment) => {
         await api.removePunishment(guild.guildId!, oldP);
         await api.addPunishment(guild.guildId!, newP);
         return 'Success';
-    }
+    }, [guild]);
 
-    const savePunishmentToRedux = (oldP: Punishment, newP: Punishment) => {
+    const savePunishmentToRedux = useCallback((oldP: Punishment, newP: Punishment) => {
         dispatch(removePunishment(oldP));
         dispatch(addPunishment(newP));
-    };
+    }, [dispatch]);
 
-    const deletePunishmentFromServer = async (p: Punishment) => api.removePunishment(guild.guildId!, p);
+    const deletePunishmentFromServer = useCallback(async (p: Punishment) => api.removePunishment(guild.guildId!, p), [guild]);
 
-    const deletePunishmentFromRedux = (p: Punishment) => {
+    const deletePunishmentFromRedux = useCallback((p: Punishment) => {
         dispatch(removePunishment(p));
-    }
+    }, [dispatch]);
 
     // const wait2S = () => new Promise<string>(r => setTimeout(r, 2000, 'Success'));
 
-    const makeNewPunishment = () => {
+    const makeNewPunishment = useCallback(() => {
         dispatch(addPunishment({
             action: 'mute',
             duration: 24 * 60 * 1000,
@@ -43,7 +44,7 @@ export default function PunishmentSettings() {
             warnings_count: 100,
             warning_severity: 'low'
         }));
-    }
+    }, [dispatch]);
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">

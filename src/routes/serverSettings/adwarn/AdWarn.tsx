@@ -4,6 +4,7 @@ import SwitchButton from '@/components/SwitchButton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setAdWarnChannel, setAdWarnDmStatus, setAdWarnStatus } from '@/redux/guildSlice';
 import * as api from '@/apiInterface/guildSettings';
+import { useCallback } from 'react';
 
 export const routerData: RouteObject = {
     path: 'adwarn/',
@@ -14,14 +15,14 @@ export default function AdWarnSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    const saveStatusToServer = (value: boolean) => api.setAdWarnStatus(guild.guildId!, { status: value });
-    const saveStatusToRedux = (value: boolean) => dispatch(setAdWarnStatus({ status: value }));
+    const saveStatusToServer = useCallback((value: boolean) => api.setAdWarnStatus(guild.guildId!, { status: value }), [guild]);
+    const saveStatusToRedux = useCallback((value: boolean) => dispatch(setAdWarnStatus({ status: value })), [dispatch]);
     
-    const saveSendDMToServer = (value: boolean) => api.setAdWarnDmStatus(guild.guildId!, { status: value });
-    const saveSendDMToRedux = (value: boolean) => dispatch(setAdWarnDmStatus({ status: value }));
+    const saveSendDMToServer = useCallback((value: boolean) => api.setAdWarnDmStatus(guild.guildId!, { status: value }), [guild]);
+    const saveSendDMToRedux = useCallback((value: boolean) => dispatch(setAdWarnDmStatus({ status: value })), [dispatch]);
     
-    const saveChannelToServer = (value: string) => api.setAdWarnChannel(guild.guildId!, { channel: value });
-    const saveChannelToRedux = (value: string) => dispatch(setAdWarnChannel({ channel: value }));
+    const saveChannelToServer = useCallback((value: string) => api.setAdWarnChannel(guild.guildId!, { channel: value }), [guild]);
+    const saveChannelToRedux = useCallback((value: string) => dispatch(setAdWarnChannel({ channel: value })), [dispatch]);
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">

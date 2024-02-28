@@ -5,6 +5,7 @@ import StaticSwitch from '@/components/StaticSwitch';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { setCompactRespone, setModStatsStatus, setPrefix } from '@/redux/guildSlice';
 import * as api from '@/apiInterface/guildSettings';
+import { useCallback } from 'react';
 
 export const routerData: RouteObject = {
     path: 'general/',
@@ -15,14 +16,14 @@ export default function GeneralSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    const savePrefixToServer = (value: string) => api.setPrefix(guild.guildId!, { prefix: value });
-    const savePrefixToRedux = (value: string) => dispatch(setPrefix({ prefix: value }));
+    const savePrefixToServer = useCallback((value: string) => api.setPrefix(guild.guildId!, { prefix: value }), [guild]);
+    const savePrefixToRedux = useCallback((value: string) => dispatch(setPrefix({ prefix: value })), [dispatch]);
     
-    const saveMStatToServer = (value: boolean) => api.setModStatsStatus(guild.guildId!, { status: value });
-    const saveMStatToRedux = (value: boolean) => dispatch(setModStatsStatus({ status: value }));
+    const saveMStatToServer = useCallback((value: boolean) => api.setModStatsStatus(guild.guildId!, { status: value }), [guild]);
+    const saveMStatToRedux = useCallback((value: boolean) => dispatch(setModStatsStatus({ status: value })), [dispatch]);
     
-    const saveCompResToServer = (value: boolean) => api.setCompactResponse(guild.guildId!, { status: value });
-    const saveCompRestToRedux = (value: boolean) => dispatch(setCompactRespone({ status: value }));
+    const saveCompResToServer = useCallback((value: boolean) => api.setCompactResponse(guild.guildId!, { status: value }), [guild]);
+    const saveCompRestToRedux = useCallback((value: boolean) => dispatch(setCompactRespone({ status: value })), [dispatch]);
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">
