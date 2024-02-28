@@ -1,7 +1,7 @@
 import { RouteObject } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import * as api from '@/apiInterface/guildSettings';
-import { MessageTemplate } from '@/components/MessageTemplate';
+import { EmbedEditor } from '@/components/EmbedEditor';
 
 export const routerData: RouteObject = {
     path: 'templates/',
@@ -19,7 +19,7 @@ export default function TemplatesSettings() {
             </div>
             <div className='flex flex-col gap-4'>
                 {
-                    guild.data!.templates.messages.map(t => <MessageTemplate template={t} key={t.id} />)
+                    guild.data!.templates.messages.map(t => <EmbedEditor template={t} key={t.id} />)
                 }
             </div>
         </div>
