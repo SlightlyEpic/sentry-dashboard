@@ -1,5 +1,5 @@
 import { RouteObject, Outlet, useLoaderData, LoaderFunction, useNavigate } from 'react-router-dom';
-import { ExtractRouteParams } from '@/util/typeMagic';
+import { ExtractRouteParams } from '@/types/typeMagic';
 import { Cog6ToothIcon, FireIcon, KeyIcon, ExclamationTriangleIcon, NewspaperIcon, ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 import { routerData as generalRouterData } from './general/General';
 import { routerData as punishmentRouterData } from './punishments/Punishments';

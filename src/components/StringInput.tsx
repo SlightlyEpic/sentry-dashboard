@@ -6,9 +6,10 @@ export interface StringInputProps {
     text: string
     saveToServer: (value: string) => Promise<string>
     saveToRedux: (value: string) => void
+    multiline?: boolean
 }
 
-export default function StringInput({ text, saveToServer, saveToRedux }: StringInputProps) {
+export default function StringInput({ text, saveToServer, saveToRedux, multiline }: StringInputProps) {
     const [currText, setCurrText] = useState(text);
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
 
@@ -30,13 +31,23 @@ export default function StringInput({ text, saveToServer, saveToRedux }: StringI
     };
 
     return (
-        <div className='h-12 flex gap-2 items-center text-white border border-bggrey-ll p-2 rounded-md bg-bgdark flex-grow'>
-            <input 
-                defaultValue={currText}
-                onChange={e => setCurrText(e.target.value)}
-                maxLength={10}
-                className='bg-transparent focus:outline-none w-full font-mono pl-2'
-            />
+        <div className='min-h-12 flex gap-2 items-center text-white border border-bggrey-ll p-2 rounded-md bg-bgdark flex-grow'>
+            {
+                !multiline
+                ? <input 
+                    defaultValue={currText}
+                    onChange={e => setCurrText(e.target.value)}
+                    className='bg-transparent focus:outline-none w-full font-mono pl-2'
+                />
+                : <textarea 
+                    className='w-full min-h-36 bg-transparent text-wrap outline-none px-2 font-mono'
+                    role='textbox'
+                    contentEditable
+                    onChange={e => setCurrText(e.currentTarget.innerText)}
+                    suppressContentEditableWarning={true}
+                    defaultValue={currText}
+                />
+            }
             <SaveStatus status={saveStatus} />
             <button
                 type="button"
@@ -44,7 +55,8 @@ export default function StringInput({ text, saveToServer, saveToRedux }: StringI
                 className={
                     'bg-green-700 rounded-md text-md font-bold px-4 py-1 ' +
                     (currText === text ? 'cursor-not-allowed brightness-50 ' : 'hover:bg-green-500 ') +
-                    (saveStatus === 'saving' ? 'brightness-50 hover:bg-green-700 ' : '')
+                    (saveStatus === 'saving' ? 'brightness-50 hover:bg-green-700 ' : '') +
+                    (multiline ? 'self-end ' : '')
                 }
             >
                 Save
