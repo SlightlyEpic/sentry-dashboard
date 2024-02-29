@@ -52,6 +52,26 @@
     .font-rubik {
         font-family: "Rubik Mono One", monospace;
     }
+
+    select {
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    option {
+        appearance: none;
+        -webkit-appearance: none;
+    }
+}
+
+@layer components {
+    .custom-select {
+        @apply w-full bg-transparent text-white min-h-12 rounded-md px-4 border border-bggrey-ll font-mono
+    }
+
+    .custom-option {
+        @apply bg-bgdark text-white
+    }
 }
 
 @layer utilities {
