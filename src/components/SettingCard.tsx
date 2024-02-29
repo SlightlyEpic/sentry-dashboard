@@ -22,7 +22,7 @@ const SettingCard = ({ icon, settingName, children, to, buttonText }: SettingCar
 
             <Link
                 to={to}
-                className='text-white self-start mt-auto bg-blurple hover:bg-bgdark
+                className='h-10 flex items-center text-white self-start mt-auto bg-blurple hover:bg-bgdark
                 hover:ring-2 hover:ring-blurple-l rounded-md text-md font-bold px-4 py-2'
             >
                 {buttonText}

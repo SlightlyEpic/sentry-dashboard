@@ -68,7 +68,7 @@ export function Navmenu({ serverId }: NavmenuProps) {
                 <div className='p-6'></div>
                 
                 <div className='mt-2 text-white self-center border border-bgdark-l w-full flex justify-center items-center flex-col'>
-                    <div>
+                    <div className='flex gap-2 items-center p-2'>
                         {/* <Avatar image='https://cdn.discordapp.com/avatars/219806114420752384/b87f6ff3b17560161b06b2330df48fb5?size=512' size='md' /> */}
                         <Avatar image={user.image!} size='md' />
                         {user.username}

@@ -18,7 +18,7 @@ export function Header() {
     return <div className='w-full top-0 z-30 self-end hidden md:flex justify-end items-center p-2 bg-bgdark border-b-bgdark-l border-b-2'>
         {headerLinks.map(v => (
             <a key={v[2]} className='text-blue-500 font-medium pl-3 pr-3 hover:text-blue-300' href={v[2]}>
-                <div className='flex gap-2'>
+                <div className='flex gap-2 items-center'>
                     {v[0]} {v[1]}
                 </div>
             </a>
