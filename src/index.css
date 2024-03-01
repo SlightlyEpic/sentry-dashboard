@@ -62,6 +62,18 @@
         appearance: none;
         -webkit-appearance: none;
     }
+
+    h1 {
+        @apply text-3xl font-bold
+    }
+
+    h2 {
+        @apply text-2xl font-bold
+    }
+
+    code {
+        @apply bg-[#1e2124] px-1 font-mono
+    }
 }
 
 @layer components {

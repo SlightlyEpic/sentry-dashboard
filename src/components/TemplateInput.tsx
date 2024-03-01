@@ -19,7 +19,7 @@ export function TemplateInput({ template }: TemplateInputProps) {
         <div className='border-t border-bggrey-ll' />
         {
             isEditing
-            ? <EmbedEditor embed={template.embed} />
+            ? <EmbedEditor embed={template.embed} saveToServer={async () => {}} saveToRedux={() => setIsEditing(!isEditing)} />
             : <EmbedViewer embed={template.embed} />
         }
         {!isEditing && <button 

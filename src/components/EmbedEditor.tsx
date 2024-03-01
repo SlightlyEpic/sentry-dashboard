@@ -99,8 +99,8 @@ export function EmbedEditor({ embed, saveToServer, saveToRedux }: EmbedEditorPro
         clearTimeout(timeoutId);
         try {
             setSaveStatus('saving');
-            // await saveToServer(currText);
-            // saveToRedux(currText);
+            await saveToServer(currEmbed);
+            saveToRedux(currEmbed);
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {
