@@ -1,6 +1,6 @@
 import { DeepPartial } from '@/types/typeMagic';
 import { removeFalsyProperties } from '@/util/embedUtil';
-import { DiscordEmbed, DiscordEmbedDescription, DiscordEmbedField, DiscordEmbedFooter, DiscordMessage, DiscordMessages } from '@skyra/discord-components-react';
+import { DiscordEmbed, DiscordEmbedDescription, DiscordEmbedField, DiscordEmbedFields, DiscordEmbedFooter, DiscordMessage, DiscordMessages } from '@skyra/discord-components-react';
 import { APIEmbed } from 'discord.js';
 import { useMemo } from 'react';
 import Markdown from 'react-markdown';
@@ -12,7 +12,7 @@ export type EmbedViewerProps = {
 const sentryAvatarLink = 'https://cdn.discordapp.com/avatars/999132132754600016/a47cee15b14c62347c0801bb66dc6393.png?size=512';
 
 export function EmbedViewer({ embed }: EmbedViewerProps) {
-    const cleanEmbed = useMemo<DeepPartial<APIEmbed> | null>(() => removeFalsyProperties(embed), [embed]);
+    let cleanEmbed = useMemo<DeepPartial<APIEmbed> | null>(() => removeFalsyProperties(embed), [embed]);
 
     // This is littered with `someProperty || undefined` because the data in the db is littered with empty strings
     return (
@@ -20,23 +20,27 @@ export function EmbedViewer({ embed }: EmbedViewerProps) {
             <DiscordMessages>
                 <DiscordMessage bot={true} author='Sentry' avatar={sentryAvatarLink}>
                     {cleanEmbed && <DiscordEmbed
-                        authorName={cleanEmbed?.author?.name || undefined}
-                        authorImage={cleanEmbed?.author?.icon_url || undefined}
-                        authorUrl={cleanEmbed?.author?.url || undefined}
-                        thumbnail={cleanEmbed?.thumbnail?.url || undefined}
-                        embedTitle={cleanEmbed?.title || undefined}
-                        url={cleanEmbed?.url || undefined}
-                        image={cleanEmbed?.image?.url || undefined}
-                        color={`#${(cleanEmbed.color ?? 0).toString(16)}`}
+                        authorName={cleanEmbed?.author?.name}
+                        authorImage={cleanEmbed?.author?.icon_url}
+                        authorUrl={cleanEmbed?.author?.url}
+                        thumbnail={cleanEmbed?.thumbnail?.url}
+                        embedTitle={cleanEmbed?.title}
+                        url={cleanEmbed?.url}
+                        image={cleanEmbed?.image?.url}
+                        color={`#${(cleanEmbed?.color ?? 0).toString(16)}`}
                     >
-                        <DiscordEmbedDescription content={cleanEmbed?.description || ''} slot='description'>
+                        {/* Embed description */}
+                        <DiscordEmbedDescription slot='description'>
                             <Markdown>{cleanEmbed?.description || ''}</Markdown>
                         </DiscordEmbedDescription>
 
                         {/* Embed fields */}
-                        {cleanEmbed.fields && cleanEmbed.fields.map(field => 
-                            <DiscordEmbedField fieldTitle={field!.name} inline={field?.inline}>{field!.value}</DiscordEmbedField>
-                        )}
+                        {embed.fields && <DiscordEmbedFields slot='fields'>
+                            {embed.fields.map((field, i) => 
+                                <DiscordEmbedField key={i} fieldTitle={field.name} inline={field?.inline}>{field.value}</DiscordEmbedField>
+                            )}
+                            </DiscordEmbedFields>
+                        }
 
                         {/* Embed footer */}
                         <DiscordEmbedFooter footerImage={cleanEmbed.footer?.icon_url || undefined} slot='footer'>

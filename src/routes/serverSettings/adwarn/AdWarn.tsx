@@ -49,10 +49,7 @@ export default function AdWarnSettings() {
                 {/* // TODO Make this actually save, and maybe swap out the select for a custom CSS based select  */}
                 <div className='w-full h-8 flex flex-col items-start justify-between gap-2'>
                     <div className='text-xl font-bold'>Message Template</div>
-                    <select name='templateSelect' className='custom-select'>
-                    {
-                        !guild.data!.adwarning_settings.message_template && <option disabled selected>No template selected</option>
-                    }
+                    <select name='templateSelect' className='custom-select' defaultValue={guild.data!.adwarning_settings.message_template?.name ?? 'No template selected'}>
                     {
                         guild.data!.templates.messages.map(t => <option key={t.id} className='custom-option'>
                             {t.name}

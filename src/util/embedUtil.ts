@@ -8,7 +8,10 @@ export function removeFalsyProperties<T>(obj: T): DeepPartial<T> | null {
     let clean: any = {};
     
     for(let key in obj) {
-        if(typeof obj[key] === 'object') {
+        if(Array.isArray(obj[key])) {
+            clean[key] = (obj[key] as unknown[]).map(v => removeFalsyProperties(v)).filter(Boolean);
+            if(clean[key].length === 0) delete clean[key];
+        } else if(typeof obj[key] === 'object') {
             const recurse = removeFalsyProperties(obj[key]);
             if(!!recurse) clean[key] = recurse;
         } else if(!!obj[key]) {
