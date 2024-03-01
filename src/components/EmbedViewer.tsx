@@ -1,6 +1,6 @@
 import { DeepPartial } from '@/types/typeMagic';
 import { useMemo } from 'react';
-import { removeFalsyProperties } from '@/util/objectUtil';
+import { removeFalsyProperties } from '@/util/embedUtil';
 
 // Maybe add declarations for this later
 import { EmbedVisualizer } from 'embed-visualizer';

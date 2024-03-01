@@ -22,3 +22,7 @@ export function removeFalsyProperties<T>(obj: T): DeepPartial<T> | null {
     /* eslint-enable no-extra-boolean-cast */
     /* eslint-enable @typescript-eslint/no-explicit-any */
 }
+
+export function numberToHexStr(color: number = 0): string {
+    return `#${color.toString(16)}`;
+}
