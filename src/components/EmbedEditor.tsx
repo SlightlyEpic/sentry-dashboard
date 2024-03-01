@@ -2,7 +2,7 @@ import { numberToHexStr } from '@/util/embedUtil';
 import StringInput from './embedEditor/StringInput';
 import { APIEmbed } from 'discord.js';
 import { useReducer, useRef, useState } from 'react';
-import ContentInput from './embedEditor/contentInput';
+import ContentInput from './embedEditor/ContentInput';
 import SaveStatus, { SaveStatusProps } from './SaveStatus';
 
 export type EmbedEditorProps = {
@@ -160,16 +160,12 @@ export function EmbedEditor({ embed, saveToServer, saveToRedux }: EmbedEditorPro
 
             <div className='flex justify-end items-center h-12'>
                 <SaveStatus status={saveStatus} />
-                <button
-                    type="button"
+                <button 
+                    type="button" 
+                    className='self-end w-32 h-10 bg-green-700 rounded-md text-md font-bold px-4 py-1 hover:bg-green-500'
                     onClick={trySave}
-                    className={
-                        'h-full w-36 bg-green-700 rounded-md text-md font-bold px-4 py-1 ' +
-                        (hasChanged ? 'cursor-not-allowed brightness-50 ' : 'hover:bg-green-500 ') +
-                        (saveStatus === 'saving' ? 'brightness-50 hover:bg-green-700 ' : '')
-                    }
                 >
-                    Save Embed
+                    Save embed
                 </button>
             </div>
         </div>

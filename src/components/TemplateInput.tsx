@@ -9,7 +9,7 @@ export type TemplateInputProps = {
 }
 
 export function TemplateInput({ template }: TemplateInputProps) {
-    const [isEditing, setIsEditing] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
 
     return <div className='flex flex-col gap-4 border border-bggrey-ll p-4 rounded-md bg-bgdark'>
         <div className='font-bold text-xl'>Name</div>
@@ -22,12 +22,12 @@ export function TemplateInput({ template }: TemplateInputProps) {
             ? <EmbedEditor embed={template.embed} />
             : <EmbedViewer embed={template.embed} />
         }
-        <button 
+        {!isEditing && <button 
             type="button" 
             className='self-end w-32 h-10 bg-green-700 rounded-md text-md font-bold px-4 py-1 hover:bg-green-500'
             onClick={() => setIsEditing(!isEditing)}
         >
             Edit embed
-        </button>
+        </button>}
     </div>
 }
