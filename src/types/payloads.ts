@@ -1,4 +1,4 @@
-import { Message, Permit, Punishment } from './db';
+import { Message, PermissionFlags, Permit, Punishment } from './db';
 
 export type SetPrefixPayload = { prefix: string };
 export type SetModStatsStatusPayload = { status: boolean };
@@ -12,7 +12,7 @@ export type RemovePermitPayload = { permitName: string };
 
 export type SetPermissionsPayload = {
     permitName: string
-    permissions: string[]
+    permissions: PermissionFlags[]
 };
 
 export type SetRolesPayload = {

@@ -91,7 +91,7 @@ function embedReducer(state: EmbedEditorProps['embed'], action: EmbedReducerActi
         case 'removeField':
             if(!newState?.fields) break;
             if(newState.fields.length <= action.payload.index) break;
-            newState.fields = newState.fields.filter((v, i) => i !== action.payload.index);
+            newState.fields = newState.fields.filter((_, i) => i !== action.payload.index);
             break;
     }
 

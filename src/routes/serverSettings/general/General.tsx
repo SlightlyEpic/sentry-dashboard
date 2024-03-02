@@ -3,7 +3,7 @@ import StringInput from '@/components/StringInput';
 import SwitchButton from '@/components/SwitchButton';
 import StaticSwitch from '@/components/StaticSwitch';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { setCompactRespone, setModStatsStatus, setPrefix } from '@/redux/guildSlice';
+import { setCompactResponse, setModStatsStatus, setPrefix } from '@/redux/guildSlice';
 import * as api from '@/apiInterface/guildSettings';
 import { useCallback } from 'react';
 
@@ -23,7 +23,7 @@ export default function GeneralSettings() {
     const saveMStatToRedux = useCallback((value: boolean) => dispatch(setModStatsStatus({ status: value })), [dispatch]);
     
     const saveCompResToServer = useCallback((value: boolean) => api.setCompactResponse(guild.guildId!, { status: value }), [guild]);
-    const saveCompRestToRedux = useCallback((value: boolean) => dispatch(setCompactRespone({ status: value })), [dispatch]);
+    const saveCompRestToRedux = useCallback((value: boolean) => dispatch(setCompactResponse({ status: value })), [dispatch]);
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">
