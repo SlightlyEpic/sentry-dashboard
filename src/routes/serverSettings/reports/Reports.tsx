@@ -2,9 +2,9 @@ import { RouteObject } from 'react-router-dom';
 import StringInput from '@/components/StringInput';
 import SwitchButton from '@/components/SwitchButton';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import * as api from '@/apiInterface/guildSettings';
-import { setReportsChannel, setReportsStatus } from '@/redux/guildSlice';
+import { setReportsChannelAT, setReportsStatusAT } from '@/redux/guildSlice';
 import { useCallback } from 'react';
+import { dispatchWhichRejects } from '@/util/reduxUtil';
 
 export const routerData: RouteObject = {
     path: 'reports/',
@@ -15,11 +15,8 @@ export default function ReportsSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
     
-    const saveStatusToServer = useCallback((value: boolean) => api.setReportsStatus(guild.guildId!, { status: value }), [guild]);
-    const saveStatusToRedux = useCallback((value: boolean) => dispatch(setReportsStatus({ status: value })), [dispatch]);
-
-    const saveChannelToServer = useCallback((value: string) => api.setReportsChannel(guild.guildId!, { channel: value }), [guild]);
-    const saveChannelToRedux = useCallback((value: string) => dispatch(setReportsChannel({ channel: value })), [dispatch]);
+    const saveStatus = useCallback((value: boolean) => dispatchWhichRejects(dispatch(setReportsStatusAT({ status: value }))), [dispatch]);
+    const saveChannel = useCallback((value: string) => dispatchWhichRejects(dispatch(setReportsChannelAT({ channel: value }))), [dispatch]);
 
     return (
         <div className="flex flex-col h-fit w-full text-white p-4 gap-8">
@@ -29,12 +26,12 @@ export default function ReportsSettings() {
             <div className='flex flex-col gap-4'>
                 <div className='w-full h-8 flex items-center justify-between gap-2'>
                     <div className='text-xl font-bold'>Status</div>
-                    <SwitchButton state={guild.data!.reports.status} saveToServer={saveStatusToServer} saveToRedux={saveStatusToRedux} />
+                    <SwitchButton state={guild.data!.reports.status} save={saveStatus} />
                 </div>
                 <div className='border-t border-bggrey-ll' />
                 <div className='w-full h-fit flex flex-col gap-2'>
                     <div className='text-xl font-bold'>Channel</div>
-                    <StringInput saveToRedux={saveChannelToRedux} saveToServer={saveChannelToServer} text={guild.data!.reports.channel ?? ''} />
+                    <StringInput save={saveChannel} text={guild.data!.reports.channel ?? ''} />
                 </div>
             </div>
         </div>

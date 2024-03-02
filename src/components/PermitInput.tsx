@@ -8,8 +8,7 @@ import { useAppSelector } from '@/redux/hooks';
 
 export type PermitInputProps = {
     permit: Permit;
-    saveToServer: (permit: Permit) => Promise<string>
-    saveToRedux: (permit: Permit) => unknown
+    save: (permit: Permit) => Promise<unknown>
 }
 
 const permissionFlags: [PermissionFlags, string][] = [
@@ -78,7 +77,7 @@ const permitReducer = (state: Permit & { changed: boolean }, action: PermitReduc
     return newState;
 }
 
-export default function PermitInput({ permit, saveToServer, saveToRedux }: PermitInputProps) {
+export default function PermitInput({ permit, save }: PermitInputProps) {
     const guild = useAppSelector(state => state.guild);
     const [currPermit, dispatch] = useReducer(permitReducer, { ...permit, changed: false });
     const [permExpanded, setPermExpanded] = useState(false);
@@ -92,8 +91,7 @@ export default function PermitInput({ permit, saveToServer, saveToRedux }: Permi
         
         try {
             setSaveStatus('saving');
-            await saveToServer(currPermit);
-            saveToRedux(currPermit);
+            await save(currPermit);
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {

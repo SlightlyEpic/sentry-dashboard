@@ -1,11 +1,11 @@
 import { RouteObject } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import * as api from '@/apiInterface/guildSettings';
 
 import PermitInput from '@/components/PermitInput';
 import { Permit } from '@/types/db';
-import { setPermitPermissions, setPermitRoles } from '@/redux/guildSlice';
+import { setPermitPermissionsAT, setPermitRolesAT } from '@/redux/guildSlice';
 import { useCallback } from 'react';
+import { dispatchWhichRejects } from '@/util/reduxUtil';
 
 export const routerData: RouteObject = {
     path: 'permits/',
@@ -16,17 +16,9 @@ export default function PermitsSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    const saveToServer = useCallback(async (permit: Permit) => {
-        await Promise.all([
-            api.setPermitPermissions(guild.guildId!, { permitName: permit.name, permissions: permit.permissions }),
-            api.setPermitRoles(guild.guildId!, { permitName: permit.name, roles: permit.roles })
-        ]);
-        return 'Success';
-    }, [guild]);
-
-    const saveToRedux = useCallback((permit: Permit) => {
-        dispatch(setPermitPermissions({ permitName: permit.name, permissions: permit.permissions }));
-        dispatch(setPermitRoles({ permitName: permit.name, roles: permit.roles }));
+    const save = useCallback(async (permit: Permit) => {
+        await dispatchWhichRejects(dispatch(setPermitPermissionsAT({ permitName: permit.name, permissions: permit.permissions })));
+        await dispatchWhichRejects(dispatch(setPermitRolesAT({ permitName: permit.name, roles: permit.roles })));
     }, [dispatch]);
 
     return (
@@ -36,7 +28,7 @@ export default function PermitsSettings() {
             </div>
             <div className='w-full flex flex-col gap-4'>
             {
-                guild.data!.custom_permits.map(permit => <PermitInput saveToRedux={saveToRedux} saveToServer={saveToServer} permit={permit} key={permit.name} />)
+                guild.data!.custom_permits.map(permit => <PermitInput save={save} permit={permit} key={permit.name} />)
             }
             </div>
         </div>
