@@ -4,12 +4,11 @@ import type { SaveStatusProps } from './SaveStatus'
 
 export type SwitchButtonProps = {
     state: boolean
-    saveToServer: (value: boolean) => Promise<string>
-    saveToRedux: (value: boolean) => void
+    save: (value: boolean) => Promise<unknown>
     disabled?: boolean
 }
 
-export default function SwitchButton({ state, saveToServer, saveToRedux }: SwitchButtonProps) {
+export default function SwitchButton({ state, save }: SwitchButtonProps) {
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
     const [currState, setCurrState] = useState(state);
 
@@ -23,8 +22,7 @@ export default function SwitchButton({ state, saveToServer, saveToRedux }: Switc
             setSaveStatus('saving');
 
             // Because currState value will update in the next render
-            await saveToServer(!currState);
-            saveToRedux(!currState);
+            await save(!currState);
 
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));

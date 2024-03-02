@@ -5,10 +5,8 @@ import type { SaveStatusProps } from './SaveStatus';
 
 export interface PunishmentProps {
     punishment: Punishment
-    saveToServer: (oldP: Punishment, newP: Punishment) => Promise<string>
-    saveToRedux: (oldP: Punishment, newP: Punishment) => void
-    deleteFromServer: (punishment: Punishment) => Promise<string>
-    deleteFromRedux: (punishment: Punishment) => void
+    save: (oldP: Punishment, newP: Punishment) => Promise<unknown>
+    deleteP: (punishment: Punishment) => Promise<unknown>
 }
 
 type PunishNumInputProps = {
@@ -93,7 +91,7 @@ function PunishTimeInput({ defaultDurationRaw, onChange }: PunishTimeInputProps)
     )
 }
 
-export default function PunishmentInput({ punishment, saveToServer, saveToRedux, deleteFromServer, deleteFromRedux }: PunishmentProps) {
+export default function PunishmentInput({ punishment, save, deleteP }: PunishmentProps) {
     const [currDuration, setCurrDuration] = useState(punishment.duration);
     const [currDurationRaw, setCurrDurationRaw] = useState(punishment.duration_raw);
     const [currWarnCount, setCurrWarnCount] = useState(punishment.warnings_count);
@@ -114,7 +112,13 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
         } else {
             setHasChanged(false);
         }
-    }, [currDuration, currWarnCount, currAction, currSeverity, punishment.duration, punishment.warnings_count, punishment.action, punishment.warning_severity]);
+    }, [
+        currDuration, 
+        currWarnCount, 
+        currAction, 
+        currSeverity, 
+        punishment, 
+    ]);
 
     const trySave = async () => {
         if(saveStatus === 'saving') return;
@@ -125,13 +129,12 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
             warnings_count: currWarnCount,
             action: currAction,
             warning_severity: currSeverity,
-            duration_raw: punishment.duration_raw
+            duration_raw: currDurationRaw
         };
 
         try {
             setSaveStatus('saving');
-            await saveToServer(punishment, currPunishment);
-            saveToRedux(punishment, currPunishment);
+            await save(punishment, currPunishment);
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {
@@ -154,8 +157,7 @@ export default function PunishmentInput({ punishment, saveToServer, saveToRedux,
 
         try {
             setSaveStatus('saving');
-            await deleteFromServer(p);
-            deleteFromRedux(p);
+            await deleteP(p);
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {

@@ -61,9 +61,9 @@ function apiAsyncThunkFactory<T extends GR.AnyPayload>(name: string, callback: (
     return createAsyncThunk(
         name,
         async (payload: T, thunkAPI) => {
-            const state = thunkAPI.getState() as GuildState;
-            if(!state.guildId) throw 'Guild Id not set.';
-            await callback(state.guildId, payload);
+            const state = thunkAPI.getState() as { guild: GuildState };
+            if(!state.guild.guildId) throw 'Guild Id not set.';
+            await callback(state.guild.guildId, payload);
             return payload;
         }
     );
@@ -72,9 +72,9 @@ function apiAsyncThunkFactory<T extends GR.AnyPayload>(name: string, callback: (
 export const refreshAllSettingsAT = createAsyncThunk(
     'guildSettings/refreshAllSettings',
     async (_: void, thunkAPI) => {
-        const state = thunkAPI.getState() as GuildState;
-        if(!state.guildId) throw 'Guild Id not set.';
-        return await api.getAllSettings(state.guildId);
+        const state = thunkAPI.getState() as { guild: GuildState };
+        if(!state.guild.guildId) throw 'Guild Id not set.';
+        return await api.getAllSettings(state.guild.guildId);
     }
 );
 export const setPrefixAT = apiAsyncThunkFactory('guildSettings/setPrefix', api.setPrefix);

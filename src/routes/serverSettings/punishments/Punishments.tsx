@@ -3,10 +3,10 @@ import { MD5 } from 'object-hash';
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import PunishmentInput from '@/components/PunishmentInput';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addPunishment, removePunishment } from '@/redux/guildSlice';
+import { addPunishment, addPunishmentAT, removePunishmentAT } from '@/redux/guildSlice';
 import type { Punishment } from '@/types/db';
-import * as api from '@/apiInterface/guildSettings';
 import { useCallback } from 'react';
+import { dispatchWhichRejects } from '@/util/reduxUtil';
 
 export const routerData: RouteObject = {
     path: 'punishments/',
@@ -17,29 +17,17 @@ export default function PunishmentSettings() {
     const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
-    const savePunishmentToServer = useCallback(async (oldP: Punishment, newP: Punishment) => {
-        await api.removePunishment(guild.guildId!, oldP);
-        await api.addPunishment(guild.guildId!, newP);
-        return 'Success';
-    }, [guild]);
-
-    const savePunishmentToRedux = useCallback((oldP: Punishment, newP: Punishment) => {
-        dispatch(removePunishment(oldP));
-        dispatch(addPunishment(newP));
+    const savePunishment = useCallback(async (oldP: Punishment, newP: Punishment) => {
+        await dispatchWhichRejects(dispatch(removePunishmentAT(oldP)));
+        await dispatchWhichRejects(dispatch(addPunishmentAT(newP)));
     }, [dispatch]);
 
-    const deletePunishmentFromServer = useCallback(async (p: Punishment) => api.removePunishment(guild.guildId!, p), [guild]);
-
-    const deletePunishmentFromRedux = useCallback((p: Punishment) => {
-        dispatch(removePunishment(p));
-    }, [dispatch]);
-
-    // const wait2S = () => new Promise<string>(r => setTimeout(r, 2000, 'Success'));
+    const deletePunishment = useCallback((p: Punishment) => dispatchWhichRejects(dispatch(removePunishmentAT(p))), [dispatch]);
 
     const makeNewPunishment = useCallback(() => {
         dispatch(addPunishment({
             action: 'mute',
-            duration: 24 * 60 * 1000,
+            duration: 24 * 60 * 60,
             duration_raw: '24h',
             warnings_count: 100,
             warning_severity: 'low'
@@ -55,10 +43,8 @@ export default function PunishmentSettings() {
                 {
                     guild.data && guild.data.warn_punishments.map(p => <PunishmentInput
                         punishment={p}
-                        saveToRedux={savePunishmentToRedux}
-                        saveToServer={savePunishmentToServer}
-                        deleteFromRedux={deletePunishmentFromRedux}
-                        deleteFromServer={deletePunishmentFromServer}
+                        save={savePunishment}
+                        deleteP={deletePunishment}
                         key={MD5(p)}
                     />)
                 }

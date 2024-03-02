@@ -2,17 +2,15 @@ import { useState } from 'react';
 import SaveStatus from './SaveStatus';
 import type { SaveStatusProps } from './SaveStatus';
 
-export interface StringInputProps {
+export interface StringInputNewProps {
     text: string
-    saveToServer: (value: string) => Promise<string>
-    saveToRedux: (value: string) => void
+    save: (value: string) => Promise<unknown>
     multiline?: boolean
 }
 
-export default function StringInput({ text, saveToServer, saveToRedux, multiline }: StringInputProps) {
+export default function StringInputNew({ text, save, multiline }: StringInputNewProps) {
     const [currText, setCurrText] = useState(text);
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
-
     const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
 
     const trySave = async () => {
@@ -20,8 +18,7 @@ export default function StringInput({ text, saveToServer, saveToRedux, multiline
         clearTimeout(timeoutId);
         try {
             setSaveStatus('saving');
-            await saveToServer(currText);
-            saveToRedux(currText);
+            await save(currText);
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {
