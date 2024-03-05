@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import './index.css';
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react'
+import NotFound404 from './routes/NotFound404';
 
 import { routerData as appRouterData } from '@/routes/App';
 import { routerData as loginRouterData } from '@/routes/Login';
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     logoutRouterData,
     serverSelectorRouterData,
     settingsRouterData,
+    {
+        path: '*',
+        element: <NotFound404 />
+    }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

@@ -22,6 +22,7 @@ export const userSlice = createSlice({
             state.image = action.payload.image;
         },
         logout: (state) => {
+            state.isAuthenticated = false;
             state.username = null;
             state.image = null;
         }
