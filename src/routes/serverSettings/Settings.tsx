@@ -92,7 +92,7 @@ function Index() {
                 settingName='Message Templates'
                 to={`/settings/${loaderData.serverId}/templates`}
                 icon={<ChatBubbleBottomCenterIcon className='w-10 h-10 -mb-1'/>}
-                buttonText='Configure Reports'
+                buttonText='Configure Templates'
             >
                 Configure messages and embed templates to be used by the bot as responses across your server.
             </SettingCard>

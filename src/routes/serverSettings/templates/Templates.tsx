@@ -1,5 +1,5 @@
 import { RouteObject } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 // import * as api from '@/apiInterface/guildSettings';
 import { TemplateInput } from '@/components/TemplateInput';
 
@@ -9,7 +9,6 @@ export const routerData: RouteObject = {
 }
 
 export default function TemplatesSettings() {
-    const dispatch = useAppDispatch();
     const guild = useAppSelector(state => state.guild);
 
     return (
