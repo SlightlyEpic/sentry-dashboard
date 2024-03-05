@@ -1,20 +1,19 @@
 import { numberToHexStr } from '@/util/embedUtil';
 import StringInput from './embedEditor/StringInput';
-import { APIEmbed } from 'discord.js';
-import React, { useCallback, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import ContentInput from './embedEditor/ContentInput';
 import SaveStatus, { SaveStatusProps } from './SaveStatus';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import SwitchButton from './embedEditor/SwitchButton';
+import { Message } from '@/types/db';
 
 export type EmbedEditorProps = {
-    embed: APIEmbed
-    saveToServer: (embed: APIEmbed) => Promise<unknown>
-    saveToRedux: (embed: APIEmbed) => unknown
+    message: Message
+    save: (message: Message) => Promise<unknown>
 };
 
-type EmbedReducerAction = {
-    type: 'setTitle' | 'setColor' | 'setAuthor' | 'setAuthorUrl' | 'setAuthorIconUrl' | 'setImageUrl' | 'setThumbnailUrl' | 'setEmbedUrl' | 'setDescription' | 'setFooter'
+type MessageReducerAction = {
+    type: 'setContent' | 'setName' | 'setTitle' | 'setColor' | 'setAuthor' | 'setAuthorUrl' | 'setAuthorIconUrl' | 'setImageUrl' | 'setThumbnailUrl' | 'setEmbedUrl' | 'setDescription' | 'setFooter'
     payload: string
 } | {
     type: 'addField'
@@ -38,85 +37,91 @@ type EmbedReducerAction = {
     }
 };
 
-function embedReducer(state: EmbedEditorProps['embed'], action: EmbedReducerAction) {
+function messageReducer(state: EmbedEditorProps['message'], action: MessageReducerAction) {
     const newState = structuredClone(state);
     switch(action.type) {
+        case 'setName':
+            newState.name = action.payload;
+            break;
+        case 'setContent':
+            newState.content = action.payload;
+            break;
         case 'setTitle':
-            newState.title = action.payload;
+            newState.embed.title = action.payload;
             break;
         case 'setColor':
-            newState.color = parseInt(action.payload.substring(1), 16) || 0;
+            newState.embed.color = parseInt(action.payload.substring(1), 16) || 0;
             break;
         case 'setAuthor':
-            if(!newState.author) newState.author = { name: '' };
-            newState.author!.name = action.payload;
+            if(!newState.embed.author) newState.embed.author = { name: '' };
+            newState.embed.author!.name = action.payload;
             break;
         case 'setAuthorUrl':
-            if(!newState.author) newState.author = { name: '' };
-            newState.author!.url = action.payload;
+            if(!newState.embed.author) newState.embed.author = { name: '' };
+            newState.embed.author!.url = action.payload;
             break;
         case 'setAuthorIconUrl':
-            if(!newState.author) newState.author = { name: '' };
-            newState.author!.icon_url = action.payload;
+            if(!newState.embed.author) newState.embed.author = { name: '' };
+            newState.embed.author!.icon_url = action.payload;
             break;
         case 'setImageUrl':
-            if(!newState.image) newState.image = { url: '' };
-            newState.image.url = action.payload;
+            if(!newState.embed.image) newState.embed.image = { url: '' };
+            newState.embed.image.url = action.payload;
             break;
         case 'setThumbnailUrl':
-            if(!newState.thumbnail) newState.thumbnail = { url: '' };
-            newState.thumbnail!.url = action.payload;
+            if(!newState.embed.thumbnail) newState.embed.thumbnail = { url: '' };
+            newState.embed.thumbnail!.url = action.payload;
             break;
         case 'setEmbedUrl':
-            newState.url = action.payload;
+            newState.embed.url = action.payload;
             break;
         case 'setDescription':
-            newState.description = action.payload;
+            newState.embed.description = action.payload;
             break;
         case 'setFooter':
-            if(!newState.footer) newState.footer = { text: '' };
-            newState.footer.text = action.payload;
+            if(!newState.embed.footer) newState.embed.footer = { text: '' };
+            newState.embed.footer.text = action.payload;
             break;
         case 'addField':
-            if(!newState?.fields) newState.fields = [];
-            newState.fields.push(action.payload);
+            if(!newState.embed?.fields) newState.embed.fields = [];
+            newState.embed.fields.push(action.payload);
             break;
         case 'setField':
-            if(!newState?.fields) break;
-            if(newState.fields.length <= action.payload.index) break;
-            if(action.payload.name) newState.fields[action.payload.index].name = action.payload.name;
-            if(action.payload.value) newState.fields[action.payload.index].value = action.payload.value;
-            if(action.payload.inline) newState.fields[action.payload.index].inline = action.payload.inline;
+            if(!newState.embed?.fields) break;
+            if(newState.embed.fields.length <= action.payload.index) break;
+            if(action.payload.name) newState.embed.fields[action.payload.index].name = action.payload.name;
+            if(action.payload.value) newState.embed.fields[action.payload.index].value = action.payload.value;
+            if(action.payload.inline) newState.embed.fields[action.payload.index].inline = action.payload.inline;
             break;
         case 'removeField':
-            if(!newState?.fields) break;
-            if(newState.fields.length <= action.payload.index) break;
-            newState.fields = newState.fields.filter((_, i) => i !== action.payload.index);
+            if(!newState.embed?.fields) break;
+            if(newState.embed.fields.length <= action.payload.index) break;
+            newState.embed.fields = newState.embed.fields.filter((_, i) => i !== action.payload.index);
             break;
     }
 
     return newState;
 }
 
-export function EmbedEditor({ embed, saveToServer, saveToRedux }: EmbedEditorProps) {
-    const [currEmbed, dispatch] = useReducer(embedReducer, embed);
+export function EmbedEditor({ message, save }: EmbedEditorProps) {
+    const [currMessage, dispatch] = useReducer(messageReducer, message);
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
     const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
+    const componentRef = useRef<HTMLDivElement>(null);
 
     const trySave = useCallback(async () => {
         if(saveStatus === 'saving') return;
         clearTimeout(timeoutId);
         try {
             setSaveStatus('saving');
-            await saveToServer(currEmbed);
-            saveToRedux(currEmbed);
+            await save(currMessage);
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {
             setSaveStatus('error');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         }
-    }, [saveStatus, timeoutId, setSaveStatus, saveToServer, saveToRedux, currEmbed]);
+    }, [currMessage, save, saveStatus, timeoutId]);
 
     const addField = useCallback(() => {
         dispatch({
@@ -128,58 +133,72 @@ export function EmbedEditor({ embed, saveToServer, saveToRedux }: EmbedEditorPro
         });
     }, [dispatch]);
 
+    useEffect(() => {
+        // console.log('hi');
+        // console.log(componentRef.current);
+        componentRef.current!.scrollIntoView({ behavior: 'smooth' });
+    }, [])
+
     return (
-        <div className='flex flex-col text-white flex-grow gap-4'>
-            <div className='font-bold text-2xl'>Embed Editor</div>
+        <div ref={componentRef} className='flex flex-col text-white flex-grow gap-4'>
+            <div className='font-bold text-2xl'>Message Editor</div>
 
             {/* <div className='w-full flex flex-col lg:flex-row gap-4'> */}
+            <div className='w-full flex flex-col gap-4'>
+                <div className='font-bold'>Template Name</div>
+                <StringInput text={currMessage.name || ''} onChange={v => dispatch({ type: 'setName', payload: v })} />
+            </div>
+            <div className='w-full flex flex-col gap-4'>
+                <div className='font-bold'>Message Content</div>
+                <ContentInput text={currMessage.content || ''} onChange={(v => dispatch({ type: 'setContent', payload: v }))} />
+            </div>
             <div className='w-full grid grid-cols-1 lg:grid-cols-2 gap-4'>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold'>Title</div>
-                    <StringInput text={currEmbed.title || ''} onChange={v => dispatch({ type: 'setTitle', payload: v })} />
+                    <StringInput text={currMessage.embed.title || ''} onChange={v => dispatch({ type: 'setTitle', payload: v })} />
                 </div>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold flex gap-2'>
                         Color
-                        <span style={{ backgroundColor: numberToHexStr(currEmbed.color) }} className='h-4 w-4 inline-block rounded-full' />
+                        <span style={{ backgroundColor: numberToHexStr(currMessage.embed.color) }} className='h-4 w-4 inline-block rounded-full' />
                     </div>
-                    <StringInput text={numberToHexStr(currEmbed.color)} onChange={v => dispatch({ type: 'setColor', payload: v })} />
+                    <StringInput text={numberToHexStr(currMessage.embed.color)} onChange={v => dispatch({ type: 'setColor', payload: v })} />
                 </div>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold'>Author</div>
-                    <StringInput text={currEmbed.author?.name || ''} onChange={v => dispatch({ type: 'setAuthor', payload: v })} />
+                    <StringInput text={currMessage.embed.author?.name || ''} onChange={v => dispatch({ type: 'setAuthor', payload: v })} />
                 </div>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold'>Author URL</div>
-                    <StringInput text={currEmbed.author?.url || ''} onChange={v => dispatch({ type: 'setAuthorUrl', payload: v })} />
+                    <StringInput text={currMessage.embed.author?.url || ''} onChange={v => dispatch({ type: 'setAuthorUrl', payload: v })} />
                 </div>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold'>Author Icon URL</div>
-                    <StringInput text={currEmbed.author?.icon_url || ''} onChange={v => dispatch({ type: 'setAuthorIconUrl', payload: v })} />
+                    <StringInput text={currMessage.embed.author?.icon_url || ''} onChange={v => dispatch({ type: 'setAuthorIconUrl', payload: v })} />
                 </div>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold'>Embed Image URL</div>
-                    <StringInput text={currEmbed.image?.url || ''} onChange={v => dispatch({ type: 'setImageUrl', payload: v })} />
+                    <StringInput text={currMessage.embed.image?.url || ''} onChange={v => dispatch({ type: 'setImageUrl', payload: v })} />
                 </div>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold'>Thumbnail URL</div>
-                    <StringInput text={currEmbed.thumbnail?.url || ''} onChange={v => dispatch({ type: 'setThumbnailUrl', payload: v })} />
+                    <StringInput text={currMessage.embed.thumbnail?.url || ''} onChange={v => dispatch({ type: 'setThumbnailUrl', payload: v })} />
                 </div>
                 <div className='w-full flex flex-col gap-4'>
                     <div className='font-bold'>Embed URL</div>
-                    <StringInput text={currEmbed.url || ''} onChange={v => dispatch({ type: 'setEmbedUrl', payload: v })} />
+                    <StringInput text={currMessage.embed.url || ''} onChange={v => dispatch({ type: 'setEmbedUrl', payload: v })} />
                 </div>
             </div>
 
             <div className='font-bold'>Description</div>
-            <ContentInput text={currEmbed.description || ''} onChange={v => dispatch({ type: 'setDescription', payload: v })} />
+            <ContentInput text={currMessage.embed.description || ''} onChange={v => dispatch({ type: 'setDescription', payload: v })} />
 
             <div className='font-bold'>Footer</div>
-            <StringInput text={currEmbed.footer?.text || ''} onChange={v => dispatch({ type: 'setFooter', payload: v })} />
+            <StringInput text={currMessage.embed.footer?.text || ''} onChange={v => dispatch({ type: 'setFooter', payload: v })} />
 
-            <div className='font-bold'>Fields (Current count: {currEmbed?.fields?.length || 0})</div>
+            <div className='font-bold'>Fields (Current count: {currMessage.embed?.fields?.length || 0})</div>
             {
-                currEmbed?.fields && currEmbed.fields.map((field, i) => {
+                currMessage.embed?.fields && currMessage.embed.fields.map((field, i) => {
                     return <React.Fragment key={i} >
                     {/* <div className='border-t border-bggrey-ll' /> */}
                     <div className='flex flex-col gap-4 p-4 border-bggrey-ll border rounded-md'>
@@ -221,10 +240,10 @@ export function EmbedEditor({ embed, saveToServer, saveToRedux }: EmbedEditorPro
                 <SaveStatus status={saveStatus} />
                 <button 
                     type="button" 
-                    className='self-end w-32 h-10 bg-green-700 rounded-md text-md font-bold px-4 py-1 hover:bg-green-500'
+                    className='self-end w-36 h-10 bg-green-700 rounded-md text-md font-bold px-4 py-1 hover:bg-green-500'
                     onClick={trySave}
                 >
-                    Save embed
+                    Save Message
                 </button>
             </div>
         </div>

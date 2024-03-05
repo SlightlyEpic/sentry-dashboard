@@ -137,4 +137,6 @@ export function setReportsChannel(guildId: string, payload: GR.SetReportsChannel
     return postApiRequest(guildId, 'reports/channel', payload);
 }
 
-
+export function setMessageTemplate(guildId: string, payload: GR.SetMessageTemplatePayload) {
+    return postApiRequest(guildId, 'templates/update', payload);
+}

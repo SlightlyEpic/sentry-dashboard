@@ -92,6 +92,7 @@ export const setReportsStatusAT = apiAsyncThunkFactory('guildSettings/setReports
 export const setReportsChannelAT = apiAsyncThunkFactory('guildSettings/setReportsChannel', api.setReportsChannel);
 export const setModStatsStatusAT = apiAsyncThunkFactory('guildSettings/setModStatsStatus', api.setModStatsStatus);
 export const setCompactResponseAT = apiAsyncThunkFactory('guildSettings/setCompactResponse', api.setCompactResponse);
+export const setMessageTemplateAT = apiAsyncThunkFactory('guildSettings/setMessageTemplate', api.setMessageTemplate);
 
 //#endregion
 
@@ -184,6 +185,16 @@ export const guildSlice = createSlice({
             if(!state.data) return;
             state.data.compact_responses = action.payload.status;
         },
+        setMessageTemplate: (state, action: PayloadAction<GR.SetMessageTemplatePayload>) => {
+            if(!state.data) return;
+            const messages = state.data.templates.messages;
+            for(let i = 0; i < messages.length; i++) {
+                if(messages[i].id === action.payload.id) {
+                    messages[i] = action.payload;
+                    break;
+                }
+            }
+        }
     },
     // * If the middleware succeeds then call the reducer to change the state, otherwise do nothing
     // * Errors will be handled by whoever calls dispatch because the promise is passed through by dispatch
@@ -205,6 +216,7 @@ export const guildSlice = createSlice({
             .addCase(setReportsChannelAT.fulfilled, guildSlice.caseReducers.setReportsChannel)
             .addCase(setModStatsStatusAT.fulfilled, guildSlice.caseReducers.setModStatsStatus)
             .addCase(setCompactResponseAT.fulfilled, guildSlice.caseReducers.setCompactResponse)
+            .addCase(setMessageTemplateAT.fulfilled, guildSlice.caseReducers.setMessageTemplate)
             .addDefaultCase(() => {});
     }
 });
@@ -227,6 +239,7 @@ export const {
     setReportsChannel,
     setModStatsStatus,
     setCompactResponse,
+    setMessageTemplate,
 } = guildSlice.actions;
 
 export default guildSlice.reducer;
