@@ -17,7 +17,8 @@ export default function Login() {
         fetch('/api/auth/')
         .then(async res => {
             if(!res.ok) {
-                navigate('/', { replace: true });
+                // navigate('/', { replace: true });
+                location.href = '/api/auth/discord'
                 return;
             }
 

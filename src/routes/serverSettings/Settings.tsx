@@ -107,7 +107,7 @@ export default function Settings() {
     const user = useAppSelector(state => state.user);
     
     useEffect(() => {
-        if(!user.isAuthenticated) navigate('/settings', { replace: true });
+        if(!user.isAuthenticated) location.href = '/login';
     }, [user, navigate]);
 
     if(!user.isAuthenticated) return <></>
