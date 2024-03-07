@@ -90,6 +90,7 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
     const [roleTimeoutId, setRoleTimeoutId] = useState<ReturnType<typeof setTimeout>>();
 
     const trySave = useCallback(async () => {
+        if(!currPermit.changed) return;
         if(saveStatus === 'saving') return;
         clearTimeout(timeoutId);
         

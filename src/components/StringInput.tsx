@@ -14,6 +14,7 @@ export default function StringInputNew({ text, save, multiline }: StringInputNew
     const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
 
     const trySave = async () => {
+        if(currText === text) return;
         if(saveStatus === 'saving') return;
         clearTimeout(timeoutId);
         try {

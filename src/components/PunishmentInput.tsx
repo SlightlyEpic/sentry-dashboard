@@ -121,6 +121,7 @@ export default function PunishmentInput({ punishment, save, deleteP }: Punishmen
     ]);
 
     const trySave = async () => {
+        if(!hasChanged) return;
         if(saveStatus === 'saving') return;
         clearTimeout(timeoutId);
         
