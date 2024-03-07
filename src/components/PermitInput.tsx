@@ -2,7 +2,7 @@ import { CompactRole, PermissionFlags, Permit } from '@/types/db'
 import { LockClosedIcon, LockOpenIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ChevronDoubleDownIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import { useReducer, useState } from 'react';
+import { useCallback, useReducer, useRef, useState } from 'react';
 import SaveStatus, { SaveStatusProps } from './SaveStatus';
 import { useAppSelector } from '@/redux/hooks';
 
@@ -84,8 +84,12 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
     const [rolesExpanded, setRolesExpanded] = useState(false);
     const [saveStatus, setSaveStatus] = useState<SaveStatusProps['status']>('idle');
     const [timeoutId, setTimeoutId] = useState<ReturnType<typeof setTimeout>>();
+    const dialogRef = useRef<HTMLDialogElement>(null);
+    const roleSelectRef = useRef<HTMLSelectElement>(null);
+    const [roleSaveStatus, setRoleSaveStatus] = useState<SaveStatusProps['status']>('idle');
+    const [roleTimeoutId, setRoleTimeoutId] = useState<ReturnType<typeof setTimeout>>();
 
-    const trySave = async () => {
+    const trySave = useCallback(async () => {
         if(saveStatus === 'saving') return;
         clearTimeout(timeoutId);
         
@@ -98,11 +102,64 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
             setSaveStatus('error');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         }
-    };
+    }, [timeoutId, currPermit, save, saveStatus]);
 
-    // const roleKeys = Object.keys(guild.data!.roles);
+    const addRole = useCallback(async (role: CompactRole) => {
+        if(roleSaveStatus === 'saving') return;
+        clearTimeout(roleTimeoutId);
 
-    return (
+        try {
+            setRoleSaveStatus('saving');
+            dispatch({ type: 'addRole', payload: { roleId: role.id } });
+            await save(currPermit);
+            setRoleSaveStatus('success');
+            setRoleTimeoutId(setTimeout(setRoleSaveStatus, 2000, 'idle'));
+            dialogRef.current?.close();
+        } catch(err) {
+            dispatch({ type: 'removeRole', payload: { roleId: role.id } });     // Rollback
+            setRoleSaveStatus('error');
+            setRoleTimeoutId(setTimeout(setRoleSaveStatus, 2000, 'idle'));
+        }
+    }, [currPermit, roleSaveStatus, roleTimeoutId, save]);
+
+    const roleKeys = Object.keys(guild.data!.roles);
+
+    return (<>
+        <dialog ref={dialogRef} className='absolute'>
+            <div className='flex flex-col gap-4 p-8 bg-bgdark text-white'>
+                <div className='text-xl font-bold'>Choose a role</div>
+                <select ref={roleSelectRef} name='templateSelect' className='custom-select' defaultValue={guild.data!.adwarning_settings.message_template?.name ?? 'No template selected'}>
+                {
+                    roleKeys
+                        .filter(roleId => !currPermit.roles.includes(roleId))
+                        .map(roleId => <option key={roleId} className='custom-option' value={roleId}>
+                        {guild.data!.roles[roleId].name}
+                    </option>)
+                }
+                </select>
+
+                <div className='flex gap-4 justify-between p-2'>
+                    <button
+                        className='h-8 rounded-md bg-rose-600 hover:bg-rose-500 w-1/2'
+                        onClick={() => dialogRef.current?.close()}
+                    >
+                        Cancel
+                    </button>
+                    <button className='h-8 rounded-md bg-green-600 hover:bg-green-500 w-1/2 flex items-center justify-center'>
+                        {
+                            roleSaveStatus === 'idle'
+                            ? <div 
+                                className='grow'
+                                onClick={() => roleSelectRef.current?.value && addRole(guild.data!.roles[roleSelectRef.current?.value])}
+                            >
+                                Save
+                            </div>
+                            : <div className='stroke-white p-2'><SaveStatus status={roleSaveStatus} /></div>
+                        }
+                    </button>
+                </div>
+            </div>
+        </dialog>
         <div className='flex flex-col text-white border border-bggrey-ll p-4 rounded-md bg-bgdark flex-grow'>
             <div className='mb-2 flex gap-2 justify-start items-center bg-transparent w-full font-mono'>
                 {
@@ -173,7 +230,7 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
                                 style={{ color: cRole ? `#${cRole.color.toString(16)}` : '0' }}
                             >
                                 <div className='w-1/2'>{cRole?.name ?? 'Unknown role'}</div>
-                                <div>{role}</div>
+                                <div className='hidden md:block'>{role}</div>
                             </div>
                         </div>
                     })
@@ -186,7 +243,7 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
                         className='flex items-center w-full sm:w-max justify-center h-10 gap-1 bg-green-700 rounded-md text-md font-bold px-4 py-1 hover:bg-green-500 '
                     >
                         <PlusCircleIcon className='w-6 h-6 translate-y-[0.07rem]' />
-                        <div className='text-xl text-center'>Add Role</div>
+                        <div className='text-xl text-center' onClick={() => dialogRef.current?.showModal()}>Add Role</div>
                     </button>
                 </div>
             </div>
@@ -207,5 +264,5 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
                 </button>
             </div>
         </div>
-    )
+    </>)
 }
