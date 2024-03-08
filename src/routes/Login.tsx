@@ -18,7 +18,7 @@ export default function Login() {
         .then(async res => {
             if(!res.ok) {
                 // navigate('/', { replace: true });
-                location.href = '/api/auth/discord'
+                location.href = `${import.meta.env.VITE_API_ORIGIN}/api/auth/discord`
                 return;
             }
 
