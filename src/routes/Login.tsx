@@ -14,7 +14,7 @@ export default function Login() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('/api/auth/')
+        fetch(`${import.meta.env.VITE_API_ORIGIN}/api/auth/`)
         .then(async res => {
             if(!res.ok) {
                 // navigate('/', { replace: true });

@@ -11,7 +11,7 @@ type GuildInfo = {
 
 function getApiRequest<T>(guildId: string, endpoint: string) {
     return new Promise<T>((resolve, reject) => {
-        fetch(`/api/guilds/${guildId}/${endpoint}`)
+        fetch(`${import.meta.env.VITE_API_ORIGIN}/api/guilds/${guildId}/${endpoint}`)
         .then(res => res.json())
         .then(res => {
             if('error' in res) {
@@ -26,7 +26,7 @@ function getApiRequest<T>(guildId: string, endpoint: string) {
 
 function postApiRequest(guildId: string, endpoint: string, payload: GR.AnyPayload) {
     return new Promise<string>((resolve, reject) => {
-        fetch(`/api/guilds/${guildId}/${endpoint}`, {
+        fetch(`${import.meta.env.VITE_API_ORIGIN}/api/guilds/${guildId}/${endpoint}`, {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: {
@@ -47,7 +47,7 @@ function postApiRequest(guildId: string, endpoint: string, payload: GR.AnyPayloa
 
 export function getMutualGuilds() {
     return new Promise<GuildInfo[]>((resolve, reject) => {
-        fetch('/api/guilds/mutual')
+        fetch(`${import.meta.env.VITE_API_ORIGIN}/api/guilds/mutual`)
         .then(res => {
             if(!res.ok) reject('Request failed.');
             else return res.json();

@@ -12,7 +12,7 @@ export const routerData: RouteObject = {
 }
 
 async function fetchMutualGuilds(skipCache = false): Promise<GuildInfo[]> {
-    const res = await fetch(`/api/guilds/mutual?force=${skipCache ? 1 : 0}`);
+    const res = await fetch(`${import.meta.env.VITE_API_ORIGIN}/api/guilds/mutual?force=${skipCache ? 1 : 0}`);
     if(!res.ok) throw `Error: ${res.statusText}`;
     const json: { message: string, data: GuildInfo[] } = await res.json();
     return json.data;

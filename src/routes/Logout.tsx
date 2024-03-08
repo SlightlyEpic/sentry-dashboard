@@ -14,7 +14,7 @@ export default function Logout() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('/api/auth/logout')
+        fetch(`${import.meta.env.VITE_API_ORIGIN}/api/auth/logout`)
         .then(() => {
             dispatch(logout());
             navigate('/', { replace: true });
