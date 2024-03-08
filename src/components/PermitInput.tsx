@@ -22,6 +22,8 @@ const permissionFlags: [PermissionFlags, string][] = [
     ['KICK_MEMBERS', 'Kick Members'],
     ['BAN_MEMBERS', 'Ban Members'],
     ['MUTE_MEMBERS', 'Mute Members'],
+    ['MANAGE_GUILD', 'Manage Guild'],
+    ['FULL_CONTROL', 'Full Control'],
 ];
 
 type PermitReducerAction = {

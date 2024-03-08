@@ -44,6 +44,8 @@ export type PermissionFlags = 'MANAGE_CASES'
                             | 'BAN_MEMBERS'
                             | 'MUTE_MEMBERS'
                             | 'MANAGE_APPEALS'
+                            | 'MANAGE_GUILD'
+                            | 'FULL_CONTROL'
 
 export type Permit = {
     name: string
