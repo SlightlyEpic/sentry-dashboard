@@ -8,7 +8,6 @@ import { useAppDispatch } from '@/redux/hooks';
 export async function dispatchWhichRejects(dispatchCall: ReturnType<ReturnType<typeof useAppDispatch>> | any) {
     const res = await dispatchCall;
     if(res.meta.requestStatus === 'rejected') {
-        console.log('Dispatch rejected:', res);
         throw res.error;
     }
     return res;

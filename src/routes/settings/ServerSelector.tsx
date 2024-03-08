@@ -15,7 +15,6 @@ async function fetchMutualGuilds(skipCache = false): Promise<GuildInfo[]> {
     const res = await fetch(`/api/guilds/mutual?force=${skipCache ? 1 : 0}`);
     if(!res.ok) throw `Error: ${res.statusText}`;
     const json: { message: string, data: GuildInfo[] } = await res.json();
-    console.log('json:', json);
     return json.data;
 }
 

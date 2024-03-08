@@ -34,6 +34,8 @@ type PermitReducerAction = {
     payload: {
         roleId: string
     }
+} | {
+    type: 'resetChanged'
 };
 
 const permitReducer = (state: Permit & { changed: boolean }, action: PermitReducerAction) => {
@@ -72,6 +74,9 @@ const permitReducer = (state: Permit & { changed: boolean }, action: PermitReduc
             newState.roles = newState.roles.filter(p => p !== action.payload.roleId);
             newState.changed = true;
             break;
+        case 'resetChanged':
+            newState.changed = false;
+            break;
     }
 
     return newState;
@@ -97,6 +102,7 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
         try {
             setSaveStatus('saving');
             await save(currPermit);
+            dispatch({ type: 'resetChanged' });
             setSaveStatus('success');
             setTimeoutId(setTimeout(setSaveStatus, 2000, 'idle'));
         } catch(err) {
@@ -227,10 +233,14 @@ export default function PermitInput({ permit, save }: PermitInputProps) {
                                 />
                             </div>
                             <div 
-                                className='h-10 w-full flex items-center peer-hover:bg-blurple hover:bg-blurple rounded-r-md transition-all duration-300 p-2 '
-                                style={{ color: cRole ? `#${cRole.color.toString(16)}` : '0' }}
+                                className='h-10 w-full flex items-center peer-hover:bg-blurple hover:bg-blurple rounded-r-md transition-all duration-300 p-2 text-white '
+                                
                             >
-                                <div className='w-1/2'>{cRole?.name ?? 'Unknown role'}</div>
+                                <div className='w-1/2'>
+                                    <div className='w-fit px-2 rounded-full' style={{ backgroundColor: cRole ? `#${cRole.color.toString(16)}` : '0' }}>
+                                        {cRole?.name ?? 'Unknown role'}
+                                    </div>
+                                </div>
                                 <div className='hidden md:block'>{role}</div>
                             </div>
                         </div>
