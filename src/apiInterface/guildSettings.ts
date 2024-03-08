@@ -12,10 +12,7 @@ type GuildInfo = {
 function getApiRequest<T>(guildId: string, endpoint: string) {
     return new Promise<T>((resolve, reject) => {
         fetch(`/api/guilds/${guildId}/${endpoint}`)
-        .then(res => {
-            if(!res.ok) reject('Request failed.');
-            else return res.json();
-        })
+        .then(res => res.json())
         .then(res => {
             if('error' in res) {
                 reject(res.error);
@@ -36,10 +33,7 @@ function postApiRequest(guildId: string, endpoint: string, payload: GR.AnyPayloa
                 'Content-Type': 'application/json'
             }
         })
-        .then(res => {
-            if(!res.ok) reject('Request failed.');
-            else return res.json();
-        })
+        .then(res => res.json())
         .then(res => {
             if('error' in res) {
                 reject(res.error);
